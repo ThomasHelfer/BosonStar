@@ -25,5 +25,6 @@ setup(name='bosonstar',
 		'numpy',
 		'scipy',
 	],
+        python_requires='>=3.6.9',
 	include_package_data=True,
 	zip_safe=False)

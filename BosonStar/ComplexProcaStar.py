@@ -41,13 +41,13 @@ class Complex_Proca_Star:
         return None
 
     def print_parameters(self):
-        print "----------------------------------------------------"
-        print r"The cosmological constant $\Lambda$ ", self._Lambda
-        print "The dimension of the problen         ", self._Dim
-        print r"Central value of f_0                ", self._f0
-        print " Please cite https://arxiv.org/pdf/1609.01735.pdf "
-        print "             https://arxiv.org/pdf/1508.05395.pdf "
-        print "----------------------------------------------------"
+        print("----------------------------------------------------")
+        print(r"The cosmological constant $\Lambda$ ", self._Lambda)
+        print("The dimension of the problen         ", self._Dim)
+        print(r"Central value of f_0                ", self._f0)
+        print(" Please cite https://arxiv.org/pdf/1609.01735.pdf ")
+        print("             https://arxiv.org/pdf/1508.05395.pdf ")
+        print("----------------------------------------------------")
 
     def eqns(self, y, r):
         """ Differential equation for scalar fields from arXiv:gr-qc/0309131
@@ -129,7 +129,7 @@ class Complex_Proca_Star:
         sigma_guess_tmp = self.sigma_guess
 
         if self.verbose >= 1:
-            print "Shooting started"
+            print("Shooting started")
         if self.verbose >= 1:
             start = time.time()
 
@@ -141,10 +141,10 @@ class Complex_Proca_Star:
             sigma_guess_tmp = root.x
 
             if self.verbose >= 2:
-                print "Edelta at R = eps ", sigma_guess_tmp[0], " with Rmax ", R_max
+                print("Edelta at R = eps ", sigma_guess_tmp[0], " with Rmax ", R_max)
 
         if self.verbose >= 1:
-            print "Shooting finished in ", time.time() - start, "sec"
+            print("Shooting finished in ", time.time() - start, "sec")
 
         self._finished_shooting = True
         output_solution = True
@@ -169,7 +169,7 @@ class Complex_Proca_Star:
         """
         if self._omega is None:
             if self.verbose >= 2:
-                print "Normalise sigma "
+                print("Normalise sigma ")
             one_over_sigma = 1. / self.__solution_array[:, 0]
             N = len(one_over_sigma)
             omega = one_over_sigma[N - 1]
@@ -177,17 +177,17 @@ class Complex_Proca_Star:
             self._omega = omega
             self.__solution_array[:, 0] = 1. / one_over_sigma
         else:
-            print " edelta has been already normalised "
+            print(" edelta has been already normalised ")
 
     def make_file(self):
         """ Creates Folder for current physics problem if they do not yet exist
         """
         name_Field = "vector_field_star"
         name_Lambda = "/Lambda_" + str(self._Lambda)
-        name_Dim    = "/Dim_" + str(self._Dim)
-        name_Param  = "/f0_" + str(self._f0)
+        name_Dim = "/Dim_" + str(self._Dim)
+        name_Param = "/f0_" + str(self._f0)
 
-        path = name_Field  
+        path = name_Field
         if not os.path.exists(path):
             os.mkdir(path)
         path += name_Lambda
@@ -198,12 +198,12 @@ class Complex_Proca_Star:
             os.mkdir(path)
         path += name_Param
         if not os.path.exists(path):
-            os.mkdir(path) 
+            os.mkdir(path)
             if self.verbose >= 1:
-                print "Create Folder with relative",path, "."
+                print("Create Folder with relative", path, ".")
         else:
             if self.verbose >= 1:
-                print "Folder with path",path, "already exists."
+                print("Folder with path", path, "already exists.")
 
         self.path = path
 
@@ -241,21 +241,22 @@ class Complex_Proca_Star:
             if self.path is None:
                 make_file()
             if self.verbose >= 2:
-                print "Write out data"
+                print("Write out data")
             pi = self.__solution_array[:, 3]
-            f =  self.__solution_array[:, 2]
-            m =  self.__solution_array[:, 1]
+            f = self.__solution_array[:, 2]
+            m = self.__solution_array[:, 1]
             sigma = self.__solution_array[:, 0]
             r = self.__solution_r_pos
             if self._omega is None:
                 self.normalise_sigma()
             omega = self._omega
-            
+
             D = self._Dim
-            Lambda = self._Lambda 
+            Lambda = self._Lambda
             mu = self._mu
 
-            F = (1 - 2 * m / r**(D - 3) - 2 * Lambda * r**2 / ((D - 2) * (D - 1)))
+            F = (1 - 2 * m / r**(D - 3) - 2 *
+                 Lambda * r**2 / ((D - 2) * (D - 1)))
             g = -(pi / (F * mu**2 * sigma**2))
 
             np.savetxt(self.path + "/omega.dat", [omega])
@@ -278,7 +279,7 @@ class Complex_Proca_Star:
         else:
 
             if self.verbose >= 1:
-                print "Plotting started"
+                print("Plotting started")
             if self.verbose >= 1:
                 start = time.time()
 
@@ -316,4 +317,4 @@ class Complex_Proca_Star:
             plt.savefig(self.path + "/overview.png")
 
             if self.verbose >= 1:
-                print "Plotting finished in ", time.time() - start, " sec"
+                print("Plotting finished in ", time.time() - start, " sec")

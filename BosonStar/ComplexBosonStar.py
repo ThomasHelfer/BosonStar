@@ -39,12 +39,12 @@ class Complex_Boson_Star:
         return None
 
     def print_parameters(self):
-        print "----------------------------------------------------"
-        print r"The cosmological constant $\Lambda$ ", self._Lambda
-        print "The dimension of the problen        ", self._Dim
-        print r"Central value of $\phi$             ", self._phi0
-        print " Please cite https://arxiv.org/abs/gr-qc/0309131    "
-        print "----------------------------------------------------"
+        print("----------------------------------------------------")
+        print((r"The cosmological constant $\Lambda$ ", self._Lambda))
+        print(("The dimension of the problen        ", self._Dim))
+        print((r"Central value of $\phi$             ", self._phi0))
+        print(" Please cite https://arxiv.org/abs/gr-qc/0309131    ")
+        print("----------------------------------------------------")
 
     def eqns(self, y, r):
         """ Differential equation for scalar fields from arXiv:gr-qc/0309131
@@ -121,7 +121,7 @@ class Complex_Boson_Star:
         e_pow_minus_delta_guess_tmp = self.e_pow_minus_delta_guess
 
         if self.verbose >= 1:
-            print "Shooting started"
+            print("Shooting started")
         if self.verbose >= 1:
             start = time.time()
 
@@ -133,10 +133,14 @@ class Complex_Boson_Star:
             e_pow_minus_delta_guess_tmp = root.x
 
             if self.verbose >= 2:
-                print "Edelta at R = eps ", e_pow_minus_delta_guess_tmp[0], " with Rmax ", R_max
+                print((
+                    "Edelta at R = eps ",
+                    e_pow_minus_delta_guess_tmp[0],
+                    " with Rmax ",
+                    R_max))
 
         if self.verbose >= 1:
-            print "Shooting finished in ", time.time() - start, "sec"
+            print(("Shooting finished in ", time.time() - start, "sec"))
 
         self._finished_shooting = True
         output_solution = True
@@ -167,7 +171,7 @@ class Complex_Boson_Star:
             self._omega = omega
             self.__solution_array[:, 0] = 1. / e_pow_delta
         else:
-            print " edelta has been already normalised "
+            print(" edelta has been already normalised ")
 
     def make_file(self):
         """ Creates Folder for current physics problem if they do not yet exist
@@ -175,10 +179,10 @@ class Complex_Boson_Star:
 
         name_Field = "scalar_field_star"
         name_Lambda = "/Lambda_" + str(self._Lambda)
-        name_Dim    = "/Dim_" + str(self._Dim)
-        name_Param  = "/phi0_" + str(self._phi0)
+        name_Dim = "/Dim_" + str(self._Dim)
+        name_Param = "/phi0_" + str(self._phi0)
 
-        path = name_Field  
+        path = name_Field
         if not os.path.exists(path):
             os.mkdir(path)
         path += name_Lambda
@@ -189,12 +193,12 @@ class Complex_Boson_Star:
             os.mkdir(path)
         path += name_Param
         if not os.path.exists(path):
-            os.mkdir(path) 
+            os.mkdir(path)
             if self.verbose >= 1:
-                print "Create Folder with relative",path, "."
+                print(("Create Folder with relative", path, "."))
         else:
             if self.verbose >= 1:
-                print "Folder with path",path, "already exists."
+                print(("Folder with path", path, "already exists."))
 
         self.path = path
 
@@ -258,7 +262,7 @@ class Complex_Boson_Star:
         else:
 
             if self.verbose >= 1:
-                print "Plotting started"
+                print("Plotting started")
             if self.verbose >= 1:
                 start = time.time()
 
@@ -296,4 +300,4 @@ class Complex_Boson_Star:
             plt.savefig(self.path + "/overview.png")
 
             if self.verbose >= 1:
-                print "Plotting finished in ", time.time() - start, " sec"
+                print(("Plotting finished in ", time.time() - start, " sec"))
