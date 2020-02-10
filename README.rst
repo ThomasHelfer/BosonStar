@@ -4,12 +4,15 @@ BosonStar - A general solver for bosonic stars
 
 Please cite appropiate papers when using this library
 
-| Matter type    | arxiv id      |
-| -------------- | ------------- |
-| Scalar Complex | 0309131       |
-| Vector Complex | 1609.01735    |
-|                | 1508.05395    |
-
++----------------+-------------+
+| Matter type    | arxiv id    |
++================+=============+
+| Scalar Complex | 0309131     |
++----------------+-------------+
+| Vector Complex | 1609.01735  |
++----------------+-------------+
+|                | 1508.05395  |
++----------------+-------------+
 
 Installation 
 ============
