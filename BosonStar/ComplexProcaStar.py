@@ -182,22 +182,28 @@ class Complex_Proca_Star:
     def make_file(self):
         """ Creates Folder for current physics problem if they do not yet exist
         """
+        name_Field = "vector_field_star"
+        name_Lambda = "/Lambda_" + str(self._Lambda)
+        name_Dim    = "/Dim_" + str(self._Dim)
+        name_Param  = "/f0_" + str(self._f0)
 
-        name_Lambda_Dim = "ProcaFieldLambda" + \
-            str(self._Lambda) + "D" + str(self._Dim)
-        path = name_Lambda_Dim
+        path = name_Field  
         if not os.path.exists(path):
             os.mkdir(path)
-
-        name_f = "f" + str(self._f0)
-        path = name_Lambda_Dim + "/" + name_f
+        path += name_Lambda
         if not os.path.exists(path):
             os.mkdir(path)
+        path += name_Dim
+        if not os.path.exists(path):
+            os.mkdir(path)
+        path += name_Param
+        if not os.path.exists(path):
+            os.mkdir(path) 
             if self.verbose >= 1:
-                print "Create Folder with relative ", path
+                print "Create Folder with relative",path, "."
         else:
             if self.verbose >= 1:
-                print "Folder with path ", path, " already exists "
+                print "Folder with path",path, "already exists."
 
         self.path = path
 
@@ -237,12 +243,12 @@ class Complex_Proca_Star:
             if self.verbose >= 2:
                 print "Write out data"
             pi = self.__solution_array[:, 3]
-            f = self.__solution_array[:, 2]
-            m = self.__solution_array[:, 1]
+            f =  self.__solution_array[:, 2]
+            m =  self.__solution_array[:, 1]
             sigma = self.__solution_array[:, 0]
             r = self.__solution_r_pos
             if self._omega is None:
-                normalise_sigma()
+                self.normalise_sigma()
             omega = self._omega
             
             D = self._Dim

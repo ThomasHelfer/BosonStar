@@ -173,20 +173,28 @@ class Complex_Boson_Star:
         """ Creates Folder for current physics problem if they do not yet exist
         """
 
-        name_Lambda_Dim = "Lambda" + str(self._Lambda) + "D" + str(self._Dim)
-        path = name_Lambda_Dim
-        if not os.path.exists(path):
-            os.mkdir(path)
+        name_Field = "scalar_field_star"
+        name_Lambda = "/Lambda_" + str(self._Lambda)
+        name_Dim    = "/Dim_" + str(self._Dim)
+        name_Param  = "/phi0_" + str(self._phi0)
 
-        name_phi = "phi" + str(self._phi0)
-        path = name_Lambda_Dim + "/" + name_phi
+        path = name_Field  
         if not os.path.exists(path):
             os.mkdir(path)
+        path += name_Lambda
+        if not os.path.exists(path):
+            os.mkdir(path)
+        path += name_Dim
+        if not os.path.exists(path):
+            os.mkdir(path)
+        path += name_Param
+        if not os.path.exists(path):
+            os.mkdir(path) 
             if self.verbose >= 1:
-                print "Create Folder with relative ", path
+                print "Create Folder with relative",path, "."
         else:
             if self.verbose >= 1:
-                print "Folder with path ", path, " already exists "
+                print "Folder with path",path, "already exists."
 
         self.path = path
 

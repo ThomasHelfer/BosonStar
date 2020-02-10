@@ -1,4 +1,4 @@
-from bosonstar.ComplexBosonStar import *
+from BosonStar.ComplexBosonStar import *
 import os
 import matplotlib.pyplot as plt
 import numpy as np
