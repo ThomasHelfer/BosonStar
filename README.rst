@@ -8,6 +8,12 @@ https://arxiv.org/abs/gr-qc/0309131
 Proca Stars 
 https://arxiv.org/pdf/1609.01735.pdf
 https://arxiv.org/pdf/1508.05395.pdf
+| Matter type    | arxiv id      |
+| -------------- | ------------- |
+| Scalar Complex | 0309131       |
+| Vector Complex | 1609.01735    |
+|                | 1508.05395    |
+
 
 Installation 
 ============
