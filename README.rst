@@ -1,3 +1,10 @@
+.. -*- mode: rst -*-
+
+.. image:: https://travis-ci.com/ThomasHelfer/BosonStar.svg?token=UsxKKr9jzGhcSzDspCJA&branch=master
+    :target: https://travis-ci.com/ThomasHelfer/BosonStar
+
+
+
 BosonStar - A general solver for bosonic stars 
 ===================================================================================
 
