@@ -20,11 +20,11 @@ setup(name='bosonstar',
 	author='ThomasHelfer',
 	author_email='thomashelfer@live.de',
 	license='MIT',
-	packages=find_packages(),
+	packages=find_packages(exclude = ["tests"]),
 	install_requires=[
 		'numpy',
 		'scipy',
 	],
-#        python_requires='>=3.6.9',
+        python_requires='>=3.5 ',
 	include_package_data=True,
 	zip_safe=False)

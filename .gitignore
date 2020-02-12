@@ -1,1 +1,6 @@
 *pyc
+
+
+bosonstar.egg-info/
+build/
+dist/   

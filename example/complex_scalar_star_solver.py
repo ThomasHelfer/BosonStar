@@ -1,46 +1,43 @@
-from BosonStar.ComplexProcaStar import *
 import os
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.integrate as spi
-import scipy.optimize as opi
-import matplotlib
-matplotlib.use("agg")
+
+from BosonStar.ComplexBosonStar import Complex_Boson_Star
 
 # =====================
 #  All imporntnat definitions
 # =====================
 
 # Physics defintions
-f0 = 0.40         # centeral phi
+phi0 = 0.40         # centeral phi
 D = 5.0             # Dimension (total not only spacial)
-Lambda = -1.0      # Cosmological constant
-mu = 1              # mass of the field
+Lambda = -0.2       # Cosmological constant
 # Solver definitions
-Rstart = 1.4
-Rend = 100.00
+Rstart = 3
+Rend = 50.00
 deltaR = 1
 N = 100000
-sigma_guess = 0.32
-
-verbose = 2
+e_pow_minus_delta_guess = 0.4999
+verbose = 1
 eps = 1e-10  # Small epsilon to avoid r \neq 0
 
 # ====================================
 #   Main routine
 # ====================================
 
-pewpew = Complex_Proca_Star(sigma_guess, f0, Lambda, mu, verbose)
+pewpew = Complex_Boson_Star(e_pow_minus_delta_guess, phi0, D, Lambda, verbose)
 
 pewpew.print_parameters()
 
-pewpew.radial_walker(Rstart, Rend, deltaR, N, eps)
+alpha0 = pewpew.radial_walker(Rstart, Rend, deltaR, N, eps)
 
 
 # =====================================
 #   Output and plotting
 # =====================================
+r, sol = pewpew.get_solution()
 
+pewpew.normalise_edelta()
 
+# ===============================
+path = pewpew.get_path()
 pewpew.plot_solution()
 pewpew.print_solution()
