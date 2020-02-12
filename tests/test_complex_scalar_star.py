@@ -27,6 +27,7 @@ def test():
 
     pewpew = Complex_Boson_Star(e_pow_minus_delta_guess, phi0, D, Lambda, verbose)
 
+    pewpew.radial_walker(Rstart, Rend, deltaR, N, eps)
 # =====================================
 #   Output and plotting
 # =====================================
