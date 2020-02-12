@@ -1,11 +1,11 @@
+import os
+import time
+
 import numpy as np
 import scipy.integrate as spi
 import scipy.optimize as opi
-from scipy.interpolate import interp1d
-import matplotlib
-import os
 import matplotlib.pyplot as plt
-import time
+from scipy.interpolate import interp1d
 
 
 class Complex_Boson_Star:
@@ -207,7 +207,7 @@ class Complex_Boson_Star:
               path (string): Realtive path used for outputs
         """
         if self.path is None:
-            make_file()
+            self.make_file()
         return self.path
 
     def get_solution(self):
@@ -227,20 +227,20 @@ class Complex_Boson_Star:
 
         """
         if self.path is None:
-            make_file()
+            self.make_file()
         if self.__solution_array is None or self.__solution_r_pos is None:
             print("----------------------------------------")
             print("WARNING: SHOOTING HAS NOT BEEN PERFORMED")
             print("----------------------------------------")
         else:
             if self.path is None:
-                make_file()
+                self.make_file()
             phi = self.__solution_array[:, 2]
             m = self.__solution_array[:, 1]
             e_pow_delta = 1 / self.__solution_array[:, 0]
             r = self.__solution_r_pos
             if self._omega is None:
-                normalise_edelta()
+                self.normalise_edelta()
             omega = self._omega
 
             np.savetxt(self.path + "/omega.dat", [omega])
@@ -254,7 +254,7 @@ class Complex_Boson_Star:
 
         """
         if self.path is None:
-            make_file()
+            self.make_file()
         if self.__solution_array is None or self.__solution_r_pos is None:
             print("----------------------------------------")
             print("WARNING: SHOOTING HAS NOT BEEN PERFORMED")

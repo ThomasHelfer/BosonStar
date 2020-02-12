@@ -1,5 +1,3 @@
-import os
-
 from BosonStar.ComplexBosonStar import Complex_Boson_Star
 
 # =====================

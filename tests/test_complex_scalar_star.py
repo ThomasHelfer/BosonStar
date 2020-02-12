@@ -1,5 +1,3 @@
-import os
-
 import numpy as np 
 
 from BosonStar.ComplexBosonStar import Complex_Boson_Star
@@ -28,11 +26,6 @@ def test():
 # ====================================
 
     pewpew = Complex_Boson_Star(e_pow_minus_delta_guess, phi0, D, Lambda, verbose)
-
-    pewpew.print_parameters()
-
-    alpha0 = pewpew.radial_walker(Rstart, Rend, deltaR, N, eps)
-
 
 # =====================================
 #   Output and plotting

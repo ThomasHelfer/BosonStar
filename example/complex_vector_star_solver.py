@@ -1,5 +1,3 @@
-import os
-
 from BosonStar.ComplexProcaStar import Complex_Proca_Star
 
 # =====================

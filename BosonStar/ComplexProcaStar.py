@@ -1,11 +1,11 @@
+import os
+import time
+
 import numpy as np
 import scipy.integrate as spi
 import scipy.optimize as opi
-from scipy.interpolate import interp1d
-import matplotlib
-import os
 import matplotlib.pyplot as plt
-import time
+from scipy.interpolate import interp1d
 
 
 class Complex_Proca_Star:
@@ -74,9 +74,6 @@ class Complex_Proca_Star:
         dsigmadr = r * mu ** 2 * (sigma * g**2.0 + sigma**(-1) * f**2 / F**2)
         dmdr = r**(D - 2) * 0.5 * (pi**2 / sigma + mu **
                                    2 * (g**2 * F + sigma**(-2) * f**2 / F))
-
-        dFdr = (-4 * Lambda * r) / ((-2 + D) * (-1 + D)) - 2 * \
-            (3 - D) * r**(2 - D) * m - 2 * r**(3 - D) * dmdr
 
         dfdr = pi + g
 
@@ -212,7 +209,7 @@ class Complex_Proca_Star:
               path (string): Realtive path used for outputs
         """
         if self.path is None:
-            make_file()
+            self.make_file()
         return self.path
 
     def get_solution(self):
@@ -232,14 +229,14 @@ class Complex_Proca_Star:
 
         """
         if self.path is None:
-            make_file()
+            self.make_file()
         if self.__solution_array is None or self.__solution_r_pos is None:
             print("----------------------------------------")
             print("WARNING: SHOOTING HAS NOT BEEN PERFORMED")
             print("----------------------------------------")
         else:
             if self.path is None:
-                make_file()
+                self.make_file()
             if self.verbose >= 2:
                 print("Write out data")
             pi = self.__solution_array[:, 3]
@@ -271,7 +268,7 @@ class Complex_Proca_Star:
 
         """
         if self.path is None:
-            make_file()
+            self.make_file()
         if self.__solution_array is None or self.__solution_r_pos is None:
             print("----------------------------------------")
             print("WARNING: SHOOTING HAS NOT BEEN PERFORMED")
