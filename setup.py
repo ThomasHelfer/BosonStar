@@ -24,6 +24,7 @@ setup(name='bosonstar',
 	install_requires=[
 		'numpy',
 		'scipy',
+                'matplotlib',
 	],
 #        python_requires='>=3.5 ',
 	include_package_data=True,
