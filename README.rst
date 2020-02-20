@@ -29,7 +29,6 @@ To install this code, run ``python setup.py install --user`` in the root directo
 Requirement
 ============
 
-python 3.6.9 + 
 
 Examples
 ========
