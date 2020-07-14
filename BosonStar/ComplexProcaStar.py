@@ -72,7 +72,7 @@ class Complex_Proca_Star:
         g = -(pi / (F * mu**2 * sigma**2))
 
         dsigmadr = r * mu ** 2 * (sigma * g**2.0 + sigma**(-1) * f**2 / F**2)
-        dmdr = r**(D - 2) * 0.5 * (pi**2 / sigma + mu **
+        dmdr = r**(D - 2) * 0.5 * (pi**2 / sigma**2 + mu **
                                    2 * (g**2 * F + sigma**(-2) * f**2 / F))
 
         dfdr = pi + g
@@ -303,9 +303,6 @@ class Complex_Proca_Star:
             ax2.set_ylabel('$ m (t)$')
             ax3.set_ylabel(r'$f (t)$')
 
-            ax1.set_xlim([0, R90 * 2])
-            ax2.set_xlim([0, R90 * 2])
-            ax3.set_xlim([0, R90 * 2])
 
             ax1.grid()
             ax2.grid()
