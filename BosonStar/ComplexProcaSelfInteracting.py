@@ -15,6 +15,7 @@ class Complex_Proca_Star:
     _Dim = None
     _Lambda = None
     _mu = None
+    _cA4 = None
 
     verbose = None
     path = None
@@ -26,13 +27,14 @@ class Complex_Proca_Star:
 
     _finished_shooting = False
 
-    def __init__(self, sigma_guess, f0, mu=1, verbose=0):
+    def __init__(self, sigma_guess, f0, cA4 = 0.0,  mu=1, verbose=0):
 
         self.sigma_guess = sigma_guess
         self._f0 = f0
         self._Dim = 4
         self._Lambda = 0
         self._mu = mu
+        self._cA4 = cA4
 
         # Will give more messages with increasing value
         self.verbose = verbose
@@ -45,8 +47,9 @@ class Complex_Proca_Star:
         print(r"The cosmological constant $\Lambda$ ", self._Lambda)
         print("The dimension of the problen         ", self._Dim)
         print(r"Central value of f_0                ", self._f0)
-        print(" Please cite https://arxiv.org/pdf/1609.01735.pdf ")
-        print("             https://arxiv.org/pdf/1508.05395.pdf ")
+        print(r"Value of selfinteraction cA4        ", self._cA4)
+        print(" Please cite https://arxiv.org/pdf/1805.09867.pdf ")
+        print(" and future paper of Superradiant selfinteraction ")
         print("----------------------------------------------------")
 
     def eqns(self, y, r):
@@ -63,7 +66,7 @@ class Complex_Proca_Star:
         Lambda = self._Lambda
         mu = self._mu
         sigma, m, a0, da0dr,a1 = y
-        cA4 = 0
+        cA4 = self._cA4
         # We defined pi = dfdx - g
         # Where sigma  = e^{-\delta}
 
@@ -182,6 +185,7 @@ class Complex_Proca_Star:
         name_Field = "vector_field_star_self_interacting"
         name_Lambda = "/Lambda_" + str(self._Lambda)
         name_Dim = "/Dim_" + str(self._Dim)
+        name_cA4 = "/cA4_" + str(self._cA4)
         name_Param = "/f0_" + str(self._f0)
 
         path = name_Field
@@ -196,6 +200,10 @@ class Complex_Proca_Star:
         path += name_Param
         if not os.path.exists(path):
             os.mkdir(path)
+        path += name_cA4
+        if not os.path.exists(path):
+            os.mkdir(path)
+
             if self.verbose >= 1:
                 print("Create Folder with relative", path, ".")
         else:
