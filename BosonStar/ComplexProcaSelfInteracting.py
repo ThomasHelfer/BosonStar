@@ -247,8 +247,9 @@ class Complex_Proca_Star:
                 self.make_file()
             if self.verbose >= 2:
                 print("Write out data")
-            pi = self.__solution_array[:, 3]
-            f = self.__solution_array[:, 2]
+            a1 = self.__solution_array[:, 4]
+            da0dr = self.__solution_array[:, 3]
+            a0 = self.__solution_array[:, 2]
             m = self.__solution_array[:, 1]
             sigma = self.__solution_array[:, 0]
             r = self.__solution_r_pos
@@ -262,14 +263,13 @@ class Complex_Proca_Star:
 
             F = (1 - 2 * m / r**(D - 3) - 2 *
                  Lambda * r**2 / ((D - 2) * (D - 1)))
-            g = -(pi / (F * mu**2 * sigma**2))
 
             np.savetxt(self.path + "/omega.dat", [omega])
             np.savetxt(self.path + "/rvals.dat", r)
             np.savetxt(self.path + "/sigma.dat", sigma)
             np.savetxt(self.path + "/m.dat", m)
-            np.savetxt(self.path + "/f.dat", f)
-            np.savetxt(self.path + "/g.dat", g)
+            np.savetxt(self.path + "/a0.dat", a0)
+            np.savetxt(self.path + "/a1.dat", a1)
 
     def plot_solution(self):
         """ Prints solution if shooting has been performed already
@@ -288,28 +288,30 @@ class Complex_Proca_Star:
             if self.verbose >= 1:
                 start = time.time()
 
-            f = self.__solution_array[:, 2]
+            a1 = self.__solution_array[:, 4]
+            da0dr = self.__solution_array[:, 3]
+            a0 = self.__solution_array[:, 2]
             m = self.__solution_array[:, 1]
             sigma = self.__solution_array[:, 0]
             r = self.__solution_r_pos
 
             # find 90 % radius of R
             Rguess = 0.01
-            maxf = max(f)
-            f_tmp_fun = interp1d(r, f - maxf * 0.1)
-            root = opi.root(f_tmp_fun, Rguess)
+            maxa0 = max(a0)
+            a0_tmp_fun = interp1d(r, a0 - maxa0 * 0.1)
+            root = opi.root(a0_tmp_fun, Rguess)
             R90 = root.x[0]
 
             fig, (ax1, ax2, ax3) = plt.subplots(3, figsize=(10, 10))
             ax1.plot(r, sigma, 'b', )
             ax2.plot(r, m, 'g')
-            ax3.plot(r, f, 'r')
+            ax3.plot(r, a0, 'r')
 
             ax3.set_xlabel('t')
 
             ax1.set_ylabel(r'$\sigma $')
             ax2.set_ylabel('$ m (t)$')
-            ax3.set_ylabel(r'$f (t)$')
+            ax3.set_ylabel(r'$a0 (t)$')
 
             ax1.grid()
             ax2.grid()
