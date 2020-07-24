@@ -4,6 +4,8 @@ import time
 import numpy as np
 import scipy.integrate as spi
 import scipy.optimize as opi
+import matplotlib
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
 from scipy.interpolate import interp1d
 
