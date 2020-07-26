@@ -77,6 +77,7 @@ class Complex_Boson_Star:
 
         dpidr = -(phi / (e_pow_minus_delta**2 * F**2)) + phi / F - (de_pow_minus_deltadr * \
                   pi) / e_pow_minus_delta - (dFdr * pi) / F + (2 * pi) / r - (D * pi) / r
+
         dydr = [de_pow_minus_deltadr, dmdr, dphidr, dpidr]
 
         return dydr
@@ -154,6 +155,40 @@ class Complex_Boson_Star:
         self._e_pow_minus_delta_final = e_pow_minus_delta_guess_tmp
 
         return e_pow_minus_delta_guess_tmp[0]
+
+    def check_Einstein_equation(self):
+        """ Checks if Einstein equation is fulfilled for D = 5
+        Returns:
+            Einstein_tt (real) : L2 norm Violation of the tt component
+        """
+
+        if self.__solution_array is None or self.__solution_r_pos is None:
+            print("----------------------------------------")
+            print("WARNING: SHOOTING HAS NOT BEEN PERFORMED")
+            print("----------------------------------------")
+            return None
+
+        if (self._Dim != 5 ):
+            print("----------------------------------------")
+            print("CHECK ONLY VALID FOR D = 5 !")
+            print("----------------------------------------")
+            return None
+
+        pi = self.__solution_array[:,3]
+        phi = self.__solution_array[:, 2]
+        m = self.__solution_array[:, 1]
+        e_pow_minus_delta  =  self.__solution_array[:, 0]
+        r = self.__solution_r_pos
+        dr = r[1]-r[0]
+        dmdr = 1.0/dr*np.gradient(m)
+
+        Lambda = self._Lambda
+
+        Einstein_tt = -phi**2/4. - (e_pow_minus_delta**2*phi**2)/2. - (e_pow_minus_delta**2*pi**2)/4. - (e_pow_minus_delta**2*Lambda*m*pi**2)/6. - (dmdr*e_pow_minus_delta**2*m)/r**5 - (e_pow_minus_delta**2*m**2*pi**2)/r**4 + (dmdr*e_pow_minus_delta**2)/(2.*r**3) + (e_pow_minus_delta**2*m*phi**2)/r**2 + (e_pow_minus_delta**2*m*pi**2)/r**2 - (dmdr*e_pow_minus_delta**2*Lambda)/(12.*r) + (e_pow_minus_delta**2*Lambda*phi**2*r**2)/12. + (e_pow_minus_delta**2*Lambda*pi**2*r**2)/12. - (e_pow_minus_delta**2*Lambda**2*pi**2*r**4)/144.
+
+        Einstein_tt_norm = np.linalg.norm(Einstein_tt)
+
+        return Einstein_tt
 
     def normalise_edelta(self):
         """ Extractsomega for e_pow_delta by the coordinate transformation  t -> omega t
