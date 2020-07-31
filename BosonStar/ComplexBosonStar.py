@@ -68,7 +68,7 @@ class Complex_Boson_Star:
 
         de_pow_minus_deltadr = r * \
             (e_pow_minus_delta * pi**2.0 + e_pow_minus_delta**(-1) * phi**2 / F**2)
-        dmdr = r**(D - 2) * 0.5 * (F * pi**2 + phi **
+        dmdr = r**(D - 2) * 0.5 * (F * pi**2 + 2*phi **
                                    2 + e_pow_minus_delta**(-2) * phi**2 / F)
         dphidr = pi
 
@@ -181,14 +181,18 @@ class Complex_Boson_Star:
         r = self.__solution_r_pos
         dr = r[1]-r[0]
         dmdr = 1.0/dr*np.gradient(m)
+        de_pow_minus_deltadr = 1.0/dr*np.gradient(e_pow_minus_delta)
 
         Lambda = self._Lambda
 
         Einstein_tt = -phi**2/4. - (e_pow_minus_delta**2*phi**2)/2. - (e_pow_minus_delta**2*pi**2)/4. - (e_pow_minus_delta**2*Lambda*m*pi**2)/6. - (dmdr*e_pow_minus_delta**2*m)/r**5 - (e_pow_minus_delta**2*m**2*pi**2)/r**4 + (dmdr*e_pow_minus_delta**2)/(2.*r**3) + (e_pow_minus_delta**2*m*phi**2)/r**2 + (e_pow_minus_delta**2*m*pi**2)/r**2 - (dmdr*e_pow_minus_delta**2*Lambda)/(12.*r) + (e_pow_minus_delta**2*Lambda*phi**2*r**2)/12. + (e_pow_minus_delta**2*Lambda*pi**2*r**2)/12. - (e_pow_minus_delta**2*Lambda**2*pi**2*r**4)/144.
 
+        Einstein_rr = phi**2/(2.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - phi**2/(4.*e_pow_minus_delta**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - pi**2/(4.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - (Lambda*m*pi**2)/(6.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + (dmdr*m)/(r**5*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + (2*de_pow_minus_deltadr*m**2)/(e_pow_minus_delta*r**5*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - (m**2*pi**2)/(r**4*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - dmdr/(2.*r**3*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - (2*de_pow_minus_deltadr*m)/(e_pow_minus_delta*r**3*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - (m*phi**2)/(r**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + (m*pi**2)/(r**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + de_pow_minus_deltadr/(2.*e_pow_minus_delta*r*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + (dmdr*Lambda)/(12.*r*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + (de_pow_minus_deltadr*Lambda*m)/(3.*e_pow_minus_delta*r*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - (de_pow_minus_deltadr*Lambda*r)/(6.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - (Lambda*phi**2*r**2)/(12.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + (Lambda*pi**2*r**2)/(12.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + (de_pow_minus_deltadr*Lambda**2*r**3)/(72.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - (Lambda**2*pi**2*r**4)/(144.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2)
+
         Einstein_tt_norm = np.linalg.norm(Einstein_tt)
 
-        return Einstein_tt
+
+        return Einstein_rr
 
     def normalise_edelta(self):
         """ Extractsomega for e_pow_delta by the coordinate transformation  t -> omega t
