@@ -75,7 +75,7 @@ class Complex_Boson_Star:
         dFdr = (-4 * Lambda * r) / ((-2 + D) * (-1 + D)) - 2 * \
             (3 - D) * r**(2 - D) * m - 2 * r**(3 - D) * dmdr
 
-        dpidr = -(phi / (e_pow_minus_delta**2 * F**2)) + phi / F - (de_pow_minus_deltadr * \
+        dpidr = -(phi / (e_pow_minus_delta**2 * F**2)) + 2*phi / F - (de_pow_minus_deltadr * \
                   pi) / e_pow_minus_delta - (dFdr * pi) / F + (2 * pi) / r - (D * pi) / r
 
         dydr = [de_pow_minus_deltadr, dmdr, dphidr, dpidr]
