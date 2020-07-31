@@ -159,7 +159,8 @@ class Complex_Boson_Star:
     def check_Einstein_equation(self):
         """ Checks if Einstein equation is fulfilled for D = 5
         Returns:
-            Einstein_tt (real) : L2 norm Violation of the tt component
+            Error (array(4,N)) : Array of Einstein Violation tt rr phiphi
+            thetatheta
         """
 
         if self.__solution_array is None or self.__solution_r_pos is None:
@@ -197,8 +198,15 @@ class Complex_Boson_Star:
 
         Einstein_thetatheta = -(d2mdr2*np.sin(theta)**2)/(6.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (de_pow_minus_deltadr*dmdr*np.sin(theta)**2)/(2.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (2*d2e_pow_minus_deltadr2*m*np.sin(theta)**2)/(3.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (m*phi**2*np.sin(theta)**2)/(1 - (2*m)/r**2 - (Lambda*r**2)/6.) - (m*pi**2*np.sin(theta)**2)/(1 - (2*m)/r**2 - (Lambda*r**2)/6.) - (2*de_pow_minus_deltadr*m**2*np.sin(theta)**2)/(3.*e_pow_minus_delta*r**3*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (d2mdr2*m*np.sin(theta)**2)/(3.*r**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (de_pow_minus_deltadr*dmdr*m*np.sin(theta)**2)/(e_pow_minus_delta*r**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (2*d2e_pow_minus_deltadr2*m**2*np.sin(theta)**2)/(3.*e_pow_minus_delta*r**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (m**2*pi**2*np.sin(theta)**2)/(r**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (de_pow_minus_deltadr*m*np.sin(theta)**2)/(3.*e_pow_minus_delta*r*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (de_pow_minus_deltadr*r*np.sin(theta)**2)/(3.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (2*de_pow_minus_deltadr*Lambda*m*r*np.sin(theta)**2)/(9.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (d2e_pow_minus_deltadr2*r**2*np.sin(theta)**2)/(6.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (d2mdr2*Lambda*r**2*np.sin(theta)**2)/(36.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (de_pow_minus_deltadr*dmdr*Lambda*r**2*np.sin(theta)**2)/(12.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (d2e_pow_minus_deltadr2*Lambda*m*r**2*np.sin(theta)**2)/(9.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (phi**2*r**2*np.sin(theta)**2)/(2.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (phi**2*r**2*np.sin(theta)**2)/(4.*e_pow_minus_delta**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (pi**2*r**2*np.sin(theta)**2)/(4.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (Lambda*m*pi**2*r**2*np.sin(theta)**2)/(6.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (7*de_pow_minus_deltadr*Lambda*r**3*np.sin(theta)**2)/(36.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (d2e_pow_minus_deltadr2*Lambda*r**4*np.sin(theta)**2)/(18.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (Lambda*phi**2*r**4*np.sin(theta)**2)/(12.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (Lambda*pi**2*r**4*np.sin(theta)**2)/(12.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (5*de_pow_minus_deltadr*Lambda**2*r**5*np.sin(theta)**2)/(216.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (d2e_pow_minus_deltadr2*Lambda**2*r**6*np.sin(theta)**2)/(216.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (Lambda**2*pi**2*r**6*np.sin(theta)**2)/(144.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.))
 
-        Einstein_tt_norm = np.linalg.norm(Einstein_tt)
-
+        plt.figure(figsize=(10,10))
+        plt.plot(r,np.abs(Einstein_tt),         label = "G_tt-T_tt")
+        plt.plot(r,np.abs(Einstein_rr),         label = "G_rr-T_rr")
+        plt.plot(r,np.abs(Einstein_phiphi),     label = "G_phph-T_phph")
+        plt.plot(r,np.abs(Einstein_thetatheta), label = "G_thth-T_thth")
+        plt.yscale('log')
+        plt.ylim(top=1.0)
+        plt.legend()
+        plt.savefig(self.path + "/EinsteinError.png")
 
         return np.array([Einstein_tt,Einstein_rr,Einstein_phiphi,Einstein_thetatheta])
 
