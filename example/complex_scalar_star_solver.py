@@ -14,7 +14,7 @@ Rend = 50.00
 deltaR = 1
 N = 100000
 e_pow_minus_delta_guess = 0.4999
-verbose = 1
+verbose = 2
 eps = 1e-10  # Small epsilon to avoid r \neq 0
 
 # ====================================
@@ -26,7 +26,7 @@ pewpew = Complex_Boson_Star(e_pow_minus_delta_guess, phi0, D, Lambda, verbose)
 pewpew.print_parameters()
 
 alpha0 = pewpew.radial_walker(Rstart, Rend, deltaR, N, eps)
-
+pewpew.check_Einstein_equation()
 
 # =====================================
 #   Output and plotting
