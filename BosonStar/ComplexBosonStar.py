@@ -100,7 +100,7 @@ class Complex_Boson_Star:
         # Define initial data vector
         y0 = [e_pow_minus_delta_at_zero, 0, self._phi0, 0]
         # Solve differential equaion
-        sol = spi.odeint(self.eqns, y0, r)
+        sol = spi.odeint(self.eqns, y0, r, h0 = 1e-10, hmax = 1e-3)
         phi_end = sol[-1, 2]
 
         if not output:
