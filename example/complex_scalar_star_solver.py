@@ -34,8 +34,8 @@ pewpew.check_Einstein_equation()
 # =====================================
 soldict = pewpew.get_solution()
 
-print(soldict.keys())
-
+# Makes sure that lapse goes asymptotically to 1
+# (Not an essential step, but recommended)
 pewpew.normalise_edelta()
 
 # ===============================
