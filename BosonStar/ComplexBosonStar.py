@@ -269,7 +269,7 @@ class Complex_Boson_Star:
 
     def get_solution(self):
         """return
-             solution_array (real array) : solution array for Rmax
+             solution_array (dictonary) : solution array for Rmax
         """
         if self.__solution_array is None or self.__solution_r_pos is None:
             print("----------------------------------------")
@@ -277,7 +277,13 @@ class Complex_Boson_Star:
             print("----------------------------------------")
             return None
         else:
-            return self.__solution_r_pos, self.__solution_array
+            soldict = {
+                "rpos" : self.__solution_r_pos,
+                "phi"  : self.__solution_array[:,2],
+                "m"    : self.__solution_array[:,1],
+                "e_pow_minus_delta" : self.__solution_array[:,0]
+            }
+            return soldict
 
     def print_solution(self):
         """ Prints solution if shooting has been performed already

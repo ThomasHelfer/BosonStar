@@ -224,7 +224,7 @@ class Complex_Proca_Star:
 
     def get_solution(self):
         """return
-             solution_array (real array) : solution array for Rmax
+             solution_array (dictonary) : solution array for Rmax
         """
         if self.__solution_array is None or self.__solution_r_pos is None:
             print("----------------------------------------")
@@ -232,7 +232,15 @@ class Complex_Proca_Star:
             print("----------------------------------------")
             return None
         else:
-            return self.__solution_r_pos, self.__solution_array
+            soldict = {
+                "rpos"  :  self.__solution_r_pos,
+                "a1"    :  self.__solution_array[:,4],
+                "da0dr" :  self.__solution_array[:,3],
+                "a0"    :  self.__solution_array[:,2],
+                "m"     :  self.__solution_array[:,1],
+                "sigma" :  self.__solution_array[:,0]
+            }
+            return soldict
 
     def print_solution(self):
         """ Prints solution if shooting has been performed already
