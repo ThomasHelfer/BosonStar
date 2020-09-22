@@ -8,4 +8,4 @@ python:
 install: 
         - pip install .  
 
-script: pytest
+script: python example/complex_scalar_star_solver.py
