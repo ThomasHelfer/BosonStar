@@ -1,5 +1,6 @@
 from BosonStar.ComplexBosonStar import Complex_Boson_Star
 
+
 # =====================
 #  All imporntnat definitions
 # =====================
@@ -31,7 +32,9 @@ pewpew.check_Einstein_equation()
 # =====================================
 #   Output and plotting
 # =====================================
-r, sol = pewpew.get_solution()
+soldict = pewpew.get_solution()
+
+print(soldict.keys())
 
 pewpew.normalise_edelta()
 
