@@ -1,5 +1,5 @@
 from BosonStar.ComplexProcaSelfInteracting import Complex_Proca_Star
-
+import numpy as np
 # =====================
 #  All imporntnat definitions
 # =====================
@@ -9,26 +9,29 @@ f0 = 0.165        # centeral phi
 D = 4.0             # Dimension (total not only spacial)
 Lambda = 0.0        # Cosmological constant
 mu = 1              # mass of the field
-cA4 = 0.5           # selfinteraction of field
+cA4 = 0.0           # selfinteraction of field
 # Solver definitions
 Rstart = 10.4
 Rend = 40.00
 deltaR = 2
 N = 100000
-sigma_guess = 0.779
+# for G = 4 use sigma_guess = 0.779
+G = 1.0
+sigma_guess = 0.8734
 
-verbose = 2
+verbose = 1
 eps = 1e-10  # Small epsilon to avoid r \neq 0
 
 # ====================================
 #   Main routine
 # ====================================
 
-pewpew = Complex_Proca_Star(sigma_guess, f0, cA4, mu, verbose)
-
+pewpew = Complex_Proca_Star(sigma_guess, f0, cA4, mu,G, verbose)
 pewpew.print_parameters()
 
 pewpew.radial_walker(Rstart, Rend, deltaR, N, eps)
+
+sol = pewpew.get_solution()
 
 # =====================================
 #   Output and plotting
