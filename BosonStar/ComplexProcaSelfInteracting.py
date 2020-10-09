@@ -282,6 +282,7 @@ class Complex_Proca_Star:
             np.savetxt(self.path + "/sigma.dat", sigma)
             np.savetxt(self.path + "/m.dat", m)
             np.savetxt(self.path + "/a0.dat", a0)
+            np.savetxt(self.path + "/da0dr.dat", da0dr)
             np.savetxt(self.path + "/a1.dat", a1)
 
     def plot_solution(self):
