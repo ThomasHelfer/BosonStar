@@ -100,7 +100,7 @@ class Complex_Boson_Star:
         # Define initial data vector
         y0 = [e_pow_minus_delta_at_zero, 0, self._phi0, 0]
         # Solve differential equaion
-        sol = spi.odeint(self.eqns, y0, r, h0 = 1e-10, hmax = 1e-3)
+        sol = spi.odeint(self.eqns, y0, r )#, h0 = 1e-10, hmax = 1e-3)
         phi_end = sol[-1, 2]
 
         if not output:
@@ -186,17 +186,24 @@ class Complex_Boson_Star:
         de_pow_minus_deltadr = 1.0/dr*np.gradient(e_pow_minus_delta)
         d2e_pow_minus_deltadr2 = 1.0/dr*np.gradient(de_pow_minus_deltadr)
 
-        theta = 0.1523
+        if self._omega is None:
+            omega = 1
+        else:
+            omega = self._omega
+
+        # A random non-trivial angle for the 4th spatial dimension
+        theta = 0.71223
 
         Lambda = self._Lambda
 
-        Einstein_tt = -phi**2/4. - (e_pow_minus_delta**2*phi**2)/2. - (e_pow_minus_delta**2*pi**2)/4. - (e_pow_minus_delta**2*Lambda*m*pi**2)/6. - (dmdr*e_pow_minus_delta**2*m)/r**5 - (e_pow_minus_delta**2*m**2*pi**2)/r**4 + (dmdr*e_pow_minus_delta**2)/(2.*r**3) + (e_pow_minus_delta**2*m*phi**2)/r**2 + (e_pow_minus_delta**2*m*pi**2)/r**2 - (dmdr*e_pow_minus_delta**2*Lambda)/(12.*r) + (e_pow_minus_delta**2*Lambda*phi**2*r**2)/12. + (e_pow_minus_delta**2*Lambda*pi**2*r**2)/12. - (e_pow_minus_delta**2*Lambda**2*pi**2*r**4)/144.
+        Einstein_tt = -(e_pow_minus_delta**2*phi**2)/2. - (omega*phi**2)/4. - (e_pow_minus_delta**2*pi**2)/4. - (e_pow_minus_delta**2*Lambda*m*pi**2)/6. - (dmdr*e_pow_minus_delta**2*m)/r**5 - (e_pow_minus_delta**2*m**2*pi**2)/r**4 + (dmdr*e_pow_minus_delta**2)/(2.*r**3) + (e_pow_minus_delta**2*m*phi**2)/r**2 + (e_pow_minus_delta**2*m*pi**2)/r**2 - (dmdr*e_pow_minus_delta**2*Lambda)/(12.*r) + (e_pow_minus_delta**2*Lambda*phi**2*r**2)/12. + (e_pow_minus_delta**2*Lambda*pi**2*r**2)/12. - (e_pow_minus_delta**2*Lambda**2*pi**2*r**4)/144.
 
-        Einstein_rr = phi**2/(2.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - phi**2/(4.*e_pow_minus_delta**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - pi**2/(4.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - (Lambda*m*pi**2)/(6.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + (dmdr*m)/(r**5*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + (2*de_pow_minus_deltadr*m**2)/(e_pow_minus_delta*r**5*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - (m**2*pi**2)/(r**4*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - dmdr/(2.*r**3*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - (2*de_pow_minus_deltadr*m)/(e_pow_minus_delta*r**3*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - (m*phi**2)/(r**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + (m*pi**2)/(r**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + de_pow_minus_deltadr/(2.*e_pow_minus_delta*r*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + (dmdr*Lambda)/(12.*r*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + (de_pow_minus_deltadr*Lambda*m)/(3.*e_pow_minus_delta*r*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - (de_pow_minus_deltadr*Lambda*r)/(6.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - (Lambda*phi**2*r**2)/(12.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + (Lambda*pi**2*r**2)/(12.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + (de_pow_minus_deltadr*Lambda**2*r**3)/(72.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - (Lambda**2*pi**2*r**4)/(144.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2)
 
-        Einstein_phiphi =  -d2mdr2/6. - (de_pow_minus_deltadr*dmdr)/(2.*e_pow_minus_delta) - (d2e_pow_minus_deltadr2*m)/(3.*e_pow_minus_delta) - (m*pi**2)/2. + (de_pow_minus_deltadr*m)/(3.*e_pow_minus_delta*r) + (de_pow_minus_deltadr*r)/(3.*e_pow_minus_delta) + (d2e_pow_minus_deltadr2*r**2)/(6.*e_pow_minus_delta) + (phi**2*r**2)/2. + (pi**2*r**2)/4. - (5*de_pow_minus_deltadr*Lambda*r**3)/(36.*e_pow_minus_delta) - (d2e_pow_minus_deltadr2*Lambda*r**4)/(36.*e_pow_minus_delta) - (Lambda*pi**2*r**4)/24. - (phi**2*r**2)/(4.*e_pow_minus_delta**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.))
+        Einstein_rr = phi**2/(2.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - (omega**2*phi**2)/(4.*e_pow_minus_delta**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - pi**2/(4.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - (Lambda*m*pi**2)/(6.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + (dmdr*m)/(r**5*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + (2*de_pow_minus_deltadr*m**2)/(e_pow_minus_delta*r**5*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - (m**2*pi**2)/(r**4*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - dmdr/(2.*r**3*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - (2*de_pow_minus_deltadr*m)/(e_pow_minus_delta*r**3*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - (m*phi**2)/(r**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + (m*pi**2)/(r**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + de_pow_minus_deltadr/(2.*e_pow_minus_delta*r*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + (dmdr*Lambda)/(12.*r*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + (de_pow_minus_deltadr*Lambda*m)/(3.*e_pow_minus_delta*r*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - (de_pow_minus_deltadr*Lambda*r)/(6.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - (Lambda*phi**2*r**2)/(12.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + (Lambda*pi**2*r**2)/(12.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) + (de_pow_minus_deltadr*Lambda**2*r**3)/(72.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2) - (Lambda**2*pi**2*r**4)/(144.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)**2)
 
-        Einstein_thetatheta = -(d2mdr2*np.sin(theta)**2)/(6.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (de_pow_minus_deltadr*dmdr*np.sin(theta)**2)/(2.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (2*d2e_pow_minus_deltadr2*m*np.sin(theta)**2)/(3.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (m*phi**2*np.sin(theta)**2)/(1 - (2*m)/r**2 - (Lambda*r**2)/6.) - (m*pi**2*np.sin(theta)**2)/(1 - (2*m)/r**2 - (Lambda*r**2)/6.) - (2*de_pow_minus_deltadr*m**2*np.sin(theta)**2)/(3.*e_pow_minus_delta*r**3*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (d2mdr2*m*np.sin(theta)**2)/(3.*r**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (de_pow_minus_deltadr*dmdr*m*np.sin(theta)**2)/(e_pow_minus_delta*r**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (2*d2e_pow_minus_deltadr2*m**2*np.sin(theta)**2)/(3.*e_pow_minus_delta*r**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (m**2*pi**2*np.sin(theta)**2)/(r**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (de_pow_minus_deltadr*m*np.sin(theta)**2)/(3.*e_pow_minus_delta*r*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (de_pow_minus_deltadr*r*np.sin(theta)**2)/(3.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (2*de_pow_minus_deltadr*Lambda*m*r*np.sin(theta)**2)/(9.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (d2e_pow_minus_deltadr2*r**2*np.sin(theta)**2)/(6.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (d2mdr2*Lambda*r**2*np.sin(theta)**2)/(36.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (de_pow_minus_deltadr*dmdr*Lambda*r**2*np.sin(theta)**2)/(12.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (d2e_pow_minus_deltadr2*Lambda*m*r**2*np.sin(theta)**2)/(9.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (phi**2*r**2*np.sin(theta)**2)/(2.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (phi**2*r**2*np.sin(theta)**2)/(4.*e_pow_minus_delta**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (pi**2*r**2*np.sin(theta)**2)/(4.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (Lambda*m*pi**2*r**2*np.sin(theta)**2)/(6.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (7*de_pow_minus_deltadr*Lambda*r**3*np.sin(theta)**2)/(36.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (d2e_pow_minus_deltadr2*Lambda*r**4*np.sin(theta)**2)/(18.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (Lambda*phi**2*r**4*np.sin(theta)**2)/(12.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (Lambda*pi**2*r**4*np.sin(theta)**2)/(12.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (5*de_pow_minus_deltadr*Lambda**2*r**5*np.sin(theta)**2)/(216.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (d2e_pow_minus_deltadr2*Lambda**2*r**6*np.sin(theta)**2)/(216.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (Lambda**2*pi**2*r**6*np.sin(theta)**2)/(144.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.))
+        Einstein_phiphi = -d2mdr2/6. - (de_pow_minus_deltadr*dmdr)/(2.*e_pow_minus_delta) - (d2e_pow_minus_deltadr2*m)/(3.*e_pow_minus_delta) - (m*pi**2)/2. + (de_pow_minus_deltadr*m)/(3.*e_pow_minus_delta*r) + (de_pow_minus_deltadr*r)/(3.*e_pow_minus_delta) + (d2e_pow_minus_deltadr2*r**2)/(6.*e_pow_minus_delta) + (phi**2*r**2)/2. + (pi**2*r**2)/4. - (5*de_pow_minus_deltadr*Lambda*r**3)/(36.*e_pow_minus_delta) - (d2e_pow_minus_deltadr2*Lambda*r**4)/(36.*e_pow_minus_delta) - (Lambda*pi**2*r**4)/24. - (omega**2*phi**2*r**2)/(4.*e_pow_minus_delta**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.))
+
+        Einstein_thetatheta = -(d2mdr2*np.sin(theta)**2)/(6.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (de_pow_minus_deltadr*dmdr*np.sin(theta)**2)/(2.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (2*d2e_pow_minus_deltadr2*m*np.sin(theta)**2)/(3.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (m*phi**2*np.sin(theta)**2)/(1 - (2*m)/r**2 - (Lambda*r**2)/6.) - (m*pi**2*np.sin(theta)**2)/(1 - (2*m)/r**2 - (Lambda*r**2)/6.) - (2*de_pow_minus_deltadr*m**2*np.sin(theta)**2)/(3.*e_pow_minus_delta*r**3*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (d2mdr2*m*np.sin(theta)**2)/(3.*r**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (de_pow_minus_deltadr*dmdr*m*np.sin(theta)**2)/(e_pow_minus_delta*r**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (2*d2e_pow_minus_deltadr2*m**2*np.sin(theta)**2)/(3.*e_pow_minus_delta*r**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (m**2*pi**2*np.sin(theta)**2)/(r**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (de_pow_minus_deltadr*m*np.sin(theta)**2)/(3.*e_pow_minus_delta*r*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (de_pow_minus_deltadr*r*np.sin(theta)**2)/(3.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (2*de_pow_minus_deltadr*Lambda*m*r*np.sin(theta)**2)/(9.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (d2e_pow_minus_deltadr2*r**2*np.sin(theta)**2)/(6.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (d2mdr2*Lambda*r**2*np.sin(theta)**2)/(36.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (de_pow_minus_deltadr*dmdr*Lambda*r**2*np.sin(theta)**2)/(12.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (d2e_pow_minus_deltadr2*Lambda*m*r**2*np.sin(theta)**2)/(9.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (phi**2*r**2*np.sin(theta)**2)/(2.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (omega**2*phi**2*r**2*np.sin(theta)**2)/(4.*e_pow_minus_delta**2*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (pi**2*r**2*np.sin(theta)**2)/(4.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (Lambda*m*pi**2*r**2*np.sin(theta)**2)/(6.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (7*de_pow_minus_deltadr*Lambda*r**3*np.sin(theta)**2)/(36.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (d2e_pow_minus_deltadr2*Lambda*r**4*np.sin(theta)**2)/(18.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (Lambda*phi**2*r**4*np.sin(theta)**2)/(12.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) - (Lambda*pi**2*r**4*np.sin(theta)**2)/(12.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (5*de_pow_minus_deltadr*Lambda**2*r**5*np.sin(theta)**2)/(216.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (d2e_pow_minus_deltadr2*Lambda**2*r**6*np.sin(theta)**2)/(216.*e_pow_minus_delta*(1 - (2*m)/r**2 - (Lambda*r**2)/6.)) + (Lambda**2*pi**2*r**6*np.sin(theta)**2)/(144.*(1 - (2*m)/r**2 - (Lambda*r**2)/6.))
 
         plt.figure(figsize=(10,10))
         plt.plot(r,np.abs(Einstein_tt),         label = "G_tt-T_tt")
@@ -221,12 +228,9 @@ class Complex_Boson_Star:
             sol (real array) : sol array with fixed edelta
         """
         if self._omega is None:
-            e_pow_delta = 1. / self.__solution_array[:, 0]
-            N = len(e_pow_delta)
-            omega = e_pow_delta[N - 1]
-            e_pow_delta = e_pow_delta / omega
+            omega = self.__solution_array[-1, 0]
             self._omega = omega
-            self.__solution_array[:, 0] = 1. / e_pow_delta
+            self.__solution_array[:, 0] *= omega
         else:
             print(" edelta has been already normalised ")
 
@@ -298,12 +302,12 @@ class Complex_Boson_Star:
         else:
             if self.path is None:
                 self.make_file()
+            if self._omega is None:
+                self.normalise_edelta()
             phi = self.__solution_array[:, 2]
             m = self.__solution_array[:, 1]
             e_pow_delta = 1 / self.__solution_array[:, 0]
             r = self.__solution_r_pos
-            if self._omega is None:
-                self.normalise_edelta()
             omega = self._omega
 
             np.savetxt(self.path + "/omega.dat", [omega])

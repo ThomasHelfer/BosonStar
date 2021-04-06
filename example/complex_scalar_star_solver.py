@@ -27,7 +27,6 @@ pewpew = Complex_Boson_Star(e_pow_minus_delta_guess, phi0, D, Lambda, verbose)
 pewpew.print_parameters()
 
 alpha0 = pewpew.radial_walker(Rstart, Rend, deltaR, N, eps)
-pewpew.check_Einstein_equation()
 
 # =====================================
 #   Output and plotting
@@ -37,6 +36,8 @@ soldict = pewpew.get_solution()
 # Makes sure that lapse goes asymptotically to 1
 # (Not an essential step, but recommended)
 pewpew.normalise_edelta()
+
+pewpew.check_Einstein_equation()
 
 # ===============================
 path = pewpew.get_path()
