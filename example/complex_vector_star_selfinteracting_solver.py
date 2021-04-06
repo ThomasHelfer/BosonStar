@@ -1,10 +1,10 @@
 from BosonStar.ComplexProcaSelfInteracting import Complex_Proca_Star
 import numpy as np
 # =====================
-#  All imporntnat definitions
+#  All important definitions
 # =====================
 
-# Physics defintions
+# Physics definitions
 f0 = 0.165          # central phi
 D = 4.0             # Dimension (total not only spacial)
 Lambda = 0.0        # Cosmological constant
