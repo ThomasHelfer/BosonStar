@@ -1,3 +1,5 @@
+from scipy.interpolate import interp1d
+import matplotlib.pyplot as plt
 import os
 import time
 
@@ -6,8 +8,6 @@ import scipy.integrate as spi
 import scipy.optimize as opi
 import matplotlib
 matplotlib.use('agg')
-import matplotlib.pyplot as plt
-from scipy.interpolate import interp1d
 
 
 class Complex_Proca_Star:
@@ -30,7 +30,7 @@ class Complex_Proca_Star:
 
     _finished_shooting = False
 
-    def __init__(self, sigma_guess, f0, cA4 = 0.0,  mu=1, GNewton = 1, verbose=0):
+    def __init__(self, sigma_guess, f0, cA4=0.0, mu=1, GNewton=1, verbose=0):
 
         self.sigma_guess = sigma_guess
         self._f0 = f0
@@ -69,21 +69,25 @@ class Complex_Proca_Star:
         """
         Lambda = self._Lambda
         mu = self._mu
-        sigma, m, a0, da0dr,a1 = y
+        sigma, m, a0, da0dr, a1 = y
         cA4 = self._cA4
         GNewton = self._GNewton
         # We defined pi = dfdx - g
         # Where sigma  = e^{-\delta}
 
-        F = (1 - 2 * m / r )
+        F = (1 - 2 * m / r)
 
-        dmdr = (a1**2*F*GNewton*mu**2*r**2)/8. + (a1**4*cA4*F**2*GNewton*mu**2*r**2)/4. - (3*a0**4*cA4*GNewton*mu**2*r**2)/(4.*F**2*sigma**4) + (a1**2*GNewton*r**2)/(8.*sigma**2) - (a1*da0dr*GNewton*r**2)/(4.*sigma**2) + (da0dr**2*GNewton*r**2)/(8.*sigma**2) + (a0**2*a1**2*cA4*GNewton*mu**2*r**2)/(2.*sigma**2) + (a0**2*GNewton*mu**2*r**2)/(8.*F*sigma**2)
+        dmdr = (a1**2 * F * GNewton * mu**2 * r**2) / 8. + (a1**4 * cA4 * F**2 * GNewton * mu**2 * r**2) / 4. - (3 * a0**4 * cA4 * GNewton * mu**2 * r**2) / (4. * F**2 * sigma**4) + (a1**2 * GNewton * r**2) / (8. * sigma**2) - \
+            (a1 * da0dr * GNewton * r**2) / (4. * sigma**2) + (da0dr**2 * GNewton * r**2) / (8. * sigma**2) + (a0**2 * a1**2 * cA4 * GNewton * mu**2 * r**2) / (2. * sigma**2) + (a0**2 * GNewton * mu**2 * r**2) / (8. * F * sigma**2)
 
-        dsigmadr = -((a0**4*cA4*GNewton*mu**2*r)/(F**3*sigma**3)) + (a0**2*GNewton*mu**2*r)/(4.*F**2*sigma) + (a1**2*GNewton*mu**2*r*sigma)/4. + a1**4*cA4*F*GNewton*mu**2*r*sigma
+        dsigmadr = -((a0**4 * cA4 * GNewton * mu**2 * r) / (F**3 * sigma**3)) + (a0**2 * GNewton * mu**2 * r) / \
+            (4. * F**2 * sigma) + (a1**2 * GNewton * mu**2 * r * sigma) / 4. + a1**4 * cA4 * F * GNewton * mu**2 * r * sigma
 
-        da1dr = (-4*a0*a1**2*cA4)/(-4*a0**2*cA4 + F*(1 + 12*a1**2*cA4*F)*sigma**2) + (8*a0*a1*cA4*da0dr)/(-4*a0**2*cA4 + F*(1 + 12*a1**2*cA4*F)*sigma**2) - a0/(F*(-4*a0**2*cA4 + F*(1 + 12*a1**2*cA4*F)*sigma**2)) - (2*a1)/(mu**2*r*(-4*a0**2*cA4 + F*(1 + 12*a1**2*cA4*F)*sigma**2)) + (2*da0dr)/(mu**2*r*(-4*a0**2*cA4 + F*(1 + 12*a1**2*cA4*F)*sigma**2)) + (4*a0**3*cA4)/(F**2*sigma**2*(-4*a0**2*cA4 + F*(1 + 12*a1**2*cA4*F)*sigma**2)) + (a1*dsigmadr)/(mu**2*sigma*(-4*a0**2*cA4 + F*(1 + 12*a1**2*cA4*F)*sigma**2)) - (da0dr*dsigmadr)/(mu**2*sigma*(-4*a0**2*cA4 + F*(1 + 12*a1**2*cA4*F)*sigma**2)) - (2*a1*dsigmadr*F*sigma)/(-4*a0**2*cA4 + F*(1 + 12*a1**2*cA4*F)*sigma**2) - (8*a1**3*cA4*dsigmadr*F**2*sigma)/(-4*a0**2*cA4 + F*(1 + 12*a1**2*cA4*F)*sigma**2) - (a1*sigma**2)/(r*(-4*a0**2*cA4 + F*(1 + 12*a1**2*cA4*F)*sigma**2)) + (2*a1*dmdr*sigma**2)/(r*(-4*a0**2*cA4 + F*(1 + 12*a1**2*cA4*F)*sigma**2)) + (a1*F*sigma**2)/(r*(-4*a0**2*cA4 + F*(1 + 12*a1**2*cA4*F)*sigma**2)) - (8*a1**3*cA4*F*sigma**2)/(r*(-4*a0**2*cA4 + F*(1 + 12*a1**2*cA4*F)*sigma**2)) + (16*a1**3*cA4*dmdr*F*sigma**2)/(r*(-4*a0**2*cA4 + F*(1 + 12*a1**2*cA4*F)*sigma**2)) + (8*a1**3*cA4*F**2*sigma**2)/(r*(-4*a0**2*cA4 + F*(1 + 12*a1**2*cA4*F)*sigma**2))
+        da1dr = (-4 * a0 * a1**2 * cA4) / (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2) + (8 * a0 * a1 * cA4 * da0dr) / (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2) - a0 / (F * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2)) - (2 * a1) / (mu**2 * r * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2)) + (2 * da0dr) / (mu**2 * r * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2)) + (4 * a0**3 * cA4) / (F**2 * sigma**2 * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2)) + (a1 * dsigmadr) / (mu**2 * sigma * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2)) - (da0dr * dsigmadr) / (mu**2 * sigma * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2)) - (2 * a1 * dsigmadr * F * sigma) / \
+            (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2) - (8 * a1**3 * cA4 * dsigmadr * F**2 * sigma) / (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2) - (a1 * sigma**2) / (r * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2)) + (2 * a1 * dmdr * sigma**2) / (r * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2)) + (a1 * F * sigma**2) / (r * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2)) - (8 * a1**3 * cA4 * F * sigma**2) / (r * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2)) + (16 * a1**3 * cA4 * dmdr * F * sigma**2) / (r * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2)) + (8 * a1**3 * cA4 * F**2 * sigma**2) / (r * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2))
 
-        d2a0dr2 = da1dr + 4*a0*a1**2*cA4*mu**2 + (a0*mu**2)/F + (2*a1)/r - (2*da0dr)/r - (4*a0**3*cA4*mu**2)/(F**2*sigma**2) - (a1*dsigmadr)/sigma + (da0dr*dsigmadr)/sigma
+        d2a0dr2 = da1dr + 4 * a0 * a1**2 * cA4 * mu**2 + (a0 * mu**2) / F + (2 * a1) / r - (2 * da0dr) / r - (
+            4 * a0**3 * cA4 * mu**2) / (F**2 * sigma**2) - (a1 * dsigmadr) / sigma + (da0dr * dsigmadr) / sigma
 
         dydr = [dsigmadr, dmdr, da0dr, d2a0dr2, da1dr]
 
@@ -168,12 +172,12 @@ class Complex_Proca_Star:
         if self._omega is None:
             if self.verbose >= 2:
                 print("Normalise sigma ")
-            omega = 1.0/self.__solution_array[-1, 0]
+            omega = 1.0 / self.__solution_array[-1, 0]
             self._omega = omega
             # Renormalising the sigma
             self.__solution_array[:, 0] *= omega
-            self.__solution_array[:,2] *= omega
-            self.__solution_array[:,3] *= omega
+            self.__solution_array[:, 2] *= omega
+            self.__solution_array[:, 3] *= omega
         else:
             print(" sigma has been already normalised ")
 
@@ -231,13 +235,13 @@ class Complex_Proca_Star:
             if self._omega is None:
                 self.normalise_sigma()
             soldict = {
-                "rpos"  :  self.__solution_r_pos,
-                "a1"    :  self.__solution_array[:,4],
-                "da0dr" :  self.__solution_array[:,3],
-                "a0"    :  self.__solution_array[:,2],
-                "m"     :  self.__solution_array[:,1],
-                "sigma" :  self.__solution_array[:,0],
-                "omega" :  self._omega
+                "rpos": self.__solution_r_pos,
+                "a1": self.__solution_array[:, 4],
+                "da0dr": self.__solution_array[:, 3],
+                "a0": self.__solution_array[:, 2],
+                "m": self.__solution_array[:, 1],
+                "sigma": self.__solution_array[:, 0],
+                "omega": self._omega
             }
             return soldict
 
