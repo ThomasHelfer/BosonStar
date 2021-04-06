@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
-from BosonStar.ComplexProcaSelfInteracting import Complex_Proca_Star
+from bosonstar.ComplexProcaSelfInteracting import Complex_Proca_Star
 
 def test():
     # =====================

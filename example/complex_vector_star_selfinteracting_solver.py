@@ -1,4 +1,4 @@
-from BosonStar.ComplexProcaSelfInteracting import Complex_Proca_Star
+from bosonstar.ComplexProcaSelfInteracting import Complex_Proca_Star
 import numpy as np
 # =====================
 #  All important definitions

@@ -1,6 +1,6 @@
 import numpy as np 
 
-from BosonStar.ComplexBosonStar import Complex_Boson_Star
+from bosonstar.ComplexBosonStar import Complex_Boson_Star
 
 # =====================
 #  All important definitions

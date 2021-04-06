@@ -1,4 +1,4 @@
-from BosonStar.ComplexBosonStar import Complex_Boson_Star
+from bosonstar.ComplexBosonStar import Complex_Boson_Star
 
 
 # =====================
