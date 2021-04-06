@@ -10,5 +10,4 @@ install:
 script:
         - python example/complex_scalar_star_solver.py
         - python example/complex_vector_star_selfinteracting_solver.py
-        - python example/complex_vector_star_solver.py
         - pytest
