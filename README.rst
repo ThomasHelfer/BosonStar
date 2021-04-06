@@ -9,7 +9,7 @@ BosonStar - A general solver for bosonic stars
 ===================================================================================
 
 
-Please cite appropiate papers when using this library
+Please cite these papers when using this library for a publication
 
 +----------------+-------------+
 | Matter type    | arxiv id    |
@@ -20,18 +20,16 @@ Please cite appropiate papers when using this library
 +----------------+-------------+
 |                | 1508.05395  |
 +----------------+-------------+
+|                | 1805.09867  |
++----------------+-------------+
 
 Installation 
 ============
 
 To install this code, run ``python setup.py install --user`` in the root directory.
 
-Requirement
-============
-
 
 Examples
 ========
 
-There are two scripts in the **example** folder, *scalar_star_solver.py* and *proca_star_solver.py*. 
-They are both examples on how to use this library for scalar and proca stars 
+There are two scripts in the **example** folder, *scalar_star_solver.py* and *complex_vector_star_selfinteracting_solver.py*.
