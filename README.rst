@@ -25,7 +25,7 @@ I used these papers to write this repo, please cite them since they did all of
 the hard work.
 
 +------------------------------------------+-------------+
-| Matter type                              | arxiv id    |
+| Matter type                              | arXiv id    |
 +==========================================+=============+
 | Scalar Complex                           | 0309131     |
 +------------------------------------------+-------------+
