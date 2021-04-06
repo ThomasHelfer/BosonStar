@@ -12,14 +12,26 @@ from scipy.interpolate import interp1d
 
 class Complex_Boson_Star:
 
+    # ------------------------------------------------------------
+    # Physical parameter that are set when initialising the class
+    # ------------------------------------------------------------
     e_pow_minus_delta_guess = None
+    # central value of the scalar field, important value
     _phi0 = None
+    # Dimension of the problem
     _Dim = None
+    # Cosmological constant
     _Lambda = None
 
+    # ------------------------------------------------------------
+    # Function parameters
+    # ------------------------------------------------------------
     verbose = None
     path = None
 
+    # ------------------------------------------------------------
+    # Internal variables that will be found after the program ran
+    # ------------------------------------------------------------
     _e_pow_minus_delta_final = None
     _omega = None
     __solution_array = None
@@ -218,14 +230,8 @@ class Complex_Boson_Star:
         return np.array([Einstein_tt,Einstein_rr,Einstein_phiphi,Einstein_thetatheta])
 
     def normalise_edelta(self):
-        """ Extractsomega for e_pow_delta by the coordinate transformation  t -> omega t
+        """ Extracts omega for e_pow_delta by the coordinate transformation  t -> omega t
 
-        Parameters:
-            sol (real array) : were the sol[:,1] corresponds to edelta^(-1) and
-                           and asymtotic value that does not go to 1
-        Returns:
-            omega (real): frequency of scalar field
-            sol (real array) : sol array with fixed edelta
         """
         if self._omega is None:
             omega = self.__solution_array[-1, 0]
@@ -265,7 +271,7 @@ class Complex_Boson_Star:
 
     def get_path(self):
         """ return
-              path (string): Realtive path used for outputs
+              path (string): Relative path used for outputs
         """
         if self.path is None:
             self.make_file()
