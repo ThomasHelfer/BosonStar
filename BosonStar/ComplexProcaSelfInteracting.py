@@ -163,26 +163,19 @@ class Complex_Proca_Star:
         return sigma_guess_tmp[0]
 
     def normalise_sigma(self):
-        """ Extractsomega for e_pow_delta by the coordinate transformation  t -> omega t
-
-        Parameters:
-            sol (real array) : were the sol[:,1] corresponds to edelta^(-1) and
-                           and asymtotic value that does not go to 1
-        Returns:
-            omega (real): frequency of scalar field
-            sol (real array) : sol array with fixed edelta
+        """ Extracts omega from sigma. Then we perform the coordinate transformation t -> omega t
         """
         if self._omega is None:
             if self.verbose >= 2:
                 print("Normalise sigma ")
-            one_over_sigma = 1. / self.__solution_array[:, 0]
-            N = len(one_over_sigma)
-            omega = one_over_sigma[N - 1]
-            one_over_sigma = one_over_sigma / omega
+            omega = 1.0/self.__solution_array[-1, 0]
             self._omega = omega
-            self.__solution_array[:, 0] = 1. / one_over_sigma
+            # Renormalising the sigma
+            self.__solution_array[:, 0] *= omega
+            self.__solution_array[:,2] *= omega
+            self.__solution_array[:,3] *= omega
         else:
-            print(" edelta has been already normalised ")
+            print(" sigma has been already normalised ")
 
     def make_file(self):
         """ Creates Folder for current physics problem if they do not yet exist
@@ -235,13 +228,16 @@ class Complex_Proca_Star:
             print("----------------------------------------")
             return None
         else:
+            if self._omega is None:
+                self.normalise_sigma()
             soldict = {
                 "rpos"  :  self.__solution_r_pos,
                 "a1"    :  self.__solution_array[:,4],
                 "da0dr" :  self.__solution_array[:,3],
                 "a0"    :  self.__solution_array[:,2],
                 "m"     :  self.__solution_array[:,1],
-                "sigma" :  self.__solution_array[:,0]
+                "sigma" :  self.__solution_array[:,0],
+                "omega" :  self._omega
             }
             return soldict
 
@@ -260,14 +256,15 @@ class Complex_Proca_Star:
                 self.make_file()
             if self.verbose >= 2:
                 print("Write out data")
+            if self._omega is None:
+                self.normalise_sigma()
+
             a1 = self.__solution_array[:, 4]
             da0dr = self.__solution_array[:, 3]
             a0 = self.__solution_array[:, 2]
             m = self.__solution_array[:, 1]
             sigma = self.__solution_array[:, 0]
             r = self.__solution_r_pos
-            if self._omega is None:
-                self.normalise_sigma()
             omega = self._omega
 
             D = self._Dim

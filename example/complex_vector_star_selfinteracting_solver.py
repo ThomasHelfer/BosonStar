@@ -5,7 +5,7 @@ import numpy as np
 # =====================
 
 # Physics defintions
-f0 = 0.165        # centeral phi
+f0 = 0.165          # central phi
 D = 4.0             # Dimension (total not only spacial)
 Lambda = 0.0        # Cosmological constant
 mu = 1              # mass of the field
@@ -16,17 +16,17 @@ Rend = 40.00
 deltaR = 2
 N = 100000
 # for G = 4 use sigma_guess = 0.779
-G = 1.0
+GNewton = 1.0
 sigma_guess = 0.8734
 
-verbose = 1
-eps = 1e-10  # Small epsilon to avoid r \neq 0
+verbose = 3
+eps = 1e-10  # Small epsilon to avoid r =  0
 
 # ====================================
 #   Main routine
 # ====================================
 
-pewpew = Complex_Proca_Star(sigma_guess, f0, cA4, mu,G, verbose)
+pewpew = Complex_Proca_Star(sigma_guess, f0, cA4, mu, GNewton, verbose)
 pewpew.print_parameters()
 
 pewpew.radial_walker(Rstart, Rend, deltaR, N, eps)
