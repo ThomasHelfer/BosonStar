@@ -8,21 +8,19 @@
 BosonStar - A general solver for bosonic stars 
 ===================================================================================
 
-This solver gives solutions for complex scalar boson stars with a massive
-potential in arbitrary dimensions and a cosmological constant as well as for a
-selfinteracting proca star in four dimensions. The aim of this repo is that
-code I used for some project can maybe be reused and doesn't get lost.
+This solver gives solutions for the following Boson Stars
 
 +------------------------------------------+-------------+----------------------------+------------------------------------------------+
-| Matter type                              | DIM         | Cosmological constant      | Potential                                      |
+| Matter type                              | dimension   | cosmological constant      | potential                                      |
 +==========================================+=============+============================+================================================+
-| Scalar Complex                           | d           | yes                        | 1/2 mu^2 phi^2                                 |
+| Scalar Complex                           | arbitrary   | yes                        | 1/2 mu^2 phi^2                                 |
 +------------------------------------------+-------------+----------------------------+------------------------------------------------+
 | complex proca star with selfinteractions | 4           | no                         | 1/2 mu^2 A^nu A_nu + 1/4 c4 (A^nu A_nu)^2      |
 +------------------------------------------+-------------+----------------------------+------------------------------------------------+
 
-I used these papers to write this repo, please cite them since they did all of
-the hard work.
+The aim of this repo is that code I used for some project can maybe be reused
+and doesn't get lost and to spread the boson star fun. I used these papers to
+write this repo, please cite them since they did all of the hard work.
 
 +------------------------------------------+-------------+
 | Matter type                              | arXiv id    |
