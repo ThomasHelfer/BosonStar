@@ -1,5 +1,4 @@
 from scipy.interpolate import interp1d
-import matplotlib.pyplot as plt
 import os
 import time
 
@@ -8,6 +7,7 @@ import scipy.integrate as spi
 import scipy.optimize as opi
 import matplotlib
 matplotlib.use('agg')
+import matplotlib.pyplot as plt
 
 
 class Complex_Proca_Star:

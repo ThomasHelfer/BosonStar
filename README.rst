@@ -13,6 +13,18 @@ potential in arbitrary dimensions and a cosmological constant as well as for a
 selfinteracting proca star in four dimensions. The aim of this repo is that
 code I used for some project can maybe be reused and doesn't get lost.
 
++------------------------------------------+-------------+
+| Matter type                              | DIM         |
++==========================================+=============+
+| Scalar Complex                           | 0309131     |
++------------------------------------------+-------------+
+| Proca Complex                            | 1609.01735  |
++------------------------------------------+-------------+
+|                                          | 1508.05395  |
++------------------------------------------+-------------+
+| complex proca star with selfinteractions | 1805.09867  |
++------------------------------------------+-------------+
+
 I used these papers to write this repo, please cite them since they did all of
 the hard work.
 
