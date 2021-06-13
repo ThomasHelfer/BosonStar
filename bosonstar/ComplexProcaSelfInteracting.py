@@ -20,6 +20,12 @@ class Complex_Proca_Star:
     _cA4 = None
     _GNewton = None
 
+    # ------------------------------------------------------------
+    # Scipy parameters
+    # ------------------------------------------------------------
+    _rtol = None
+    _atol = None
+
     verbose = None
     path = None
 
@@ -30,7 +36,8 @@ class Complex_Proca_Star:
 
     _finished_shooting = False
 
-    def __init__(self, sigma_guess, f0, cA4=0.0, mu=1, GNewton=1, verbose=0):
+    def __init__(self, sigma_guess, f0, cA4=0.0, mu=1, GNewton=1, verbose=0,
+            rtol = 1e-10, atol = 1e-10):
 
         self.sigma_guess = sigma_guess
         self._f0 = f0
@@ -39,6 +46,8 @@ class Complex_Proca_Star:
         self._mu = mu
         self._cA4 = cA4
         self._GNewton = GNewton
+        self._atol = atol
+        self._rtol = rtol
 
         # Will give more messages with increasing value
         self.verbose = verbose
@@ -110,7 +119,7 @@ class Complex_Proca_Star:
         # Define initial data vector
         y0 = [sigma_at_zero, 0, self._f0, 0, 0]
         # Solve differential equaion
-        sol = spi.odeint(self.eqns, y0, r)
+        sol = spi.odeint(self.eqns, y0, r, atol = self._atol, rtol = self._rtol)
         f_end = sol[-1, 2]
 
         if not output:
