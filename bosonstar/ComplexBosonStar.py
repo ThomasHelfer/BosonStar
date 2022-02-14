@@ -39,12 +39,15 @@ class Complex_Boson_Star:
 
     _finished_shooting = False
 
-    def __init__(self, e_pow_minus_delta_guess, phi0, Dim, Lambda, verbose=0):
+    def __init__(self, e_pow_minus_delta_guess, phi0, Dim, Lambda, verbose=0,
+            rtol = 1e-10, atol = 1e-10):
 
         self.e_pow_minus_delta_guess = e_pow_minus_delta_guess
         self._phi0 = phi0
         self._Dim = Dim
         self._Lambda = Lambda
+        self._atol = atol
+        self._rtol = rtol
 
         # Will give more messages with increasing value
         self.verbose = verbose
@@ -112,7 +115,7 @@ class Complex_Boson_Star:
         # Define initial data vector
         y0 = [e_pow_minus_delta_at_zero, 0, self._phi0, 0]
         # Solve differential equaion
-        sol = spi.odeint(self.eqns, y0, r)  # , h0 = 1e-10, hmax = 1e-3)
+        sol = spi.odeint(self.eqns, y0, r, atol = self._atol, rtol = self._rtol)
         phi_end = sol[-1, 2]
 
         if not output:
