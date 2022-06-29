@@ -78,31 +78,25 @@ class Complex_Proca_Star:
         """
         Lambda = self._Lambda
         mu = self._mu
-        sigma, m, a0, da0dr, a1 = y
+        L, dLdr, Omega, a0, da0dr, a1 = y 
         cA4 = self._cA4
         GNewton = self._GNewton
         # We defined pi = dfdx - g
         # Where sigma  = e^{-\delta}
 
-        F = (1 - 2 * m / r)
+        dL2dr2 = dLdr**2/(2.*L) - (a1**4*cA4*GNewton*mu**2)/(4.*L) - (a1**2*GNewton*L*mu**2)/8. + (3*a0**4*cA4*GNewton*L**3*mu**2)/(4.*Omega**4) - (a1**2*GNewton*L)/(8.*Omega**2) + (a1*da0dr*GNewton*L)/(4.*Omega**2) - (da0dr**2*GNewton*L)/(8.*Omega**2) - (a0**2*a1**2*cA4*GNewton*L*mu**2)/(2.*Omega**2) - (a0**2*GNewton*L**3*mu**2)/(8.*Omega**2) - (2*dLdr)/r  
 
-        dmdr = (a1**2 * F * GNewton * mu**2 * r**2) / 8. + (a1**4 * cA4 * F**2 * GNewton * mu**2 * r**2) / 4. - (3 * a0**4 * cA4 * GNewton * mu**2 * r**2) / (4. * F**2 * sigma**4) + (a1**2 * GNewton * r**2) / (8. * sigma**2) - \
-            (a1 * da0dr * GNewton * r**2) / (4. * sigma**2) + (da0dr**2 * GNewton * r**2) / (8. * sigma**2) + (a0**2 * a1**2 * cA4 * GNewton * mu**2 * r**2) / (2. * sigma**2) + (a0**2 * GNewton * mu**2 * r**2) / (8. * F * sigma**2)
+        dOdr = -((dLdr*Omega)/(L + dLdr*r)) - (a0**4*cA4*GNewton*L**3*mu**2*r)/(4.*Omega**3*(L + dLdr*r)) - (a1**2*GNewton*L*r)/(8.*Omega*(L + dLdr*r)) + (a1*da0dr*GNewton*L*r)/(4.*Omega*(L + dLdr*r)) - (da0dr**2*GNewton*L*r)/(8.*Omega*(L + dLdr*r)) - (a0**2*a1**2*cA4*GNewton*L*mu**2*r)/(2.*Omega*(L + dLdr*r)) + (a0**2*GNewton*L**3*mu**2*r)/(8.*Omega*(L + dLdr*r)) - (dLdr**2*Omega*r)/(2.*L*(L + dLdr*r)) + (3*a1**4*cA4*GNewton*mu**2*Omega*r)/(4.*L*(L + dLdr*r)) + (a1**2*GNewton*L*mu**2*Omega*r)/(8.*(L + dLdr*r))
 
-        dsigmadr = -((a0**4 * cA4 * GNewton * mu**2 * r) / (F**3 * sigma**3)) + (a0**2 * GNewton * mu**2 * r) / \
-            (4. * F**2 * sigma) + (a1**2 * GNewton * mu**2 * r * sigma) / 4. + a1**4 * cA4 * F * GNewton * mu**2 * r * sigma
+        da1dr = (-4*a0*a1**2*cA4*L**2)/(-4*a0**2*cA4*L**2 + (12*a1**2*cA4 + L**2)*Omega**2) + (8*a0*a1*cA4*da0dr*L**2)/(-4*a0**2*cA4*L**2 + (12*a1**2*cA4 + L**2)*Omega**2) - (a0*L**4)/(-4*a0**2*cA4*L**2 + (12*a1**2*cA4 + L**2)*Omega**2) - (a1*dLdr*L)/(mu**2*(-4*a0**2*cA4*L**2 + (12*a1**2*cA4 + L**2)*Omega**2)) + (da0dr*dLdr*L)/(mu**2*(-4*a0**2*cA4*L**2 + (12*a1**2*cA4 + L**2)*Omega**2)) + (4*a0**3*cA4*L**4)/(Omega**2*(-4*a0**2*cA4*L**2 + (12*a1**2*cA4 + L**2)*Omega**2)) + (a1*dOdr*L**2)/(mu**2*Omega*(-4*a0**2*cA4*L**2 + (12*a1**2*cA4 + L**2)*Omega**2)) - (da0dr*dOdr*L**2)/(mu**2*Omega*(-4*a0**2*cA4*L**2 + (12*a1**2*cA4 + L**2)*Omega**2)) - (8*a1**3*cA4*dOdr*Omega)/(-4*a0**2*cA4*L**2 + (12*a1**2*cA4 + L**2)*Omega**2) - (2*a1*dOdr*L**2*Omega)/(-4*a0**2*cA4*L**2 + (12*a1**2*cA4 + L**2)*Omega**2) + (8*a1**3*cA4*dLdr*Omega**2)/(L*(-4*a0**2*cA4*L**2 + (12*a1**2*cA4 + L**2)*Omega**2)) - (2*a1*L**2)/(mu**2*(-4*a0**2*cA4*L**2 + (12*a1**2*cA4 + L**2)*Omega**2)*r) + (2*da0dr*L**2)/(mu**2*(-4*a0**2*cA4*L**2 + (12*a1**2*cA4 + L**2)*Omega**2)*r)
 
-        da1dr = (-4 * a0 * a1**2 * cA4) / (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2) + (8 * a0 * a1 * cA4 * da0dr) / (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2) - a0 / (F * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2)) - (2 * a1) / (mu**2 * r * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2)) + (2 * da0dr) / (mu**2 * r * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2)) + (4 * a0**3 * cA4) / (F**2 * sigma**2 * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2)) + (a1 * dsigmadr) / (mu**2 * sigma * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2)) - (da0dr * dsigmadr) / (mu**2 * sigma * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2)) - (2 * a1 * dsigmadr * F * sigma) / \
-            (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2) - (8 * a1**3 * cA4 * dsigmadr * F**2 * sigma) / (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2) - (a1 * sigma**2) / (r * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2)) + (2 * a1 * dmdr * sigma**2) / (r * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2)) + (a1 * F * sigma**2) / (r * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2)) - (8 * a1**3 * cA4 * F * sigma**2) / (r * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2)) + (16 * a1**3 * cA4 * dmdr * F * sigma**2) / (r * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2)) + (8 * a1**3 * cA4 * F**2 * sigma**2) / (r * (-4 * a0**2 * cA4 + F * (1 + 12 * a1**2 * cA4 * F) * sigma**2))
+        d2a0dr2 = da1dr + (a1*dLdr)/L - (da0dr*dLdr)/L + 4*a0*a1**2*cA4*mu**2 + a0*L**2*mu**2 - (4*a0**3*cA4*L**2*mu**2)/Omega**2 - (a1*dOdr)/Omega + (da0dr*dOdr)/Omega + (2*a1)/r - (2*da0dr)/r
 
-        d2a0dr2 = da1dr + 4 * a0 * a1**2 * cA4 * mu**2 + (a0 * mu**2) / F + (2 * a1) / r - (2 * da0dr) / r - (
-            4 * a0**3 * cA4 * mu**2) / (F**2 * sigma**2) - (a1 * dsigmadr) / sigma + (da0dr * dsigmadr) / sigma
-
-        dydr = [dsigmadr, dmdr, da0dr, d2a0dr2, da1dr]
+        dydr = [dLdr, dL2dr2, dOdr, da0dr, d2a0dr2, da1dr]
 
         return dydr
 
-    def shoot(self, sigma_at_zero, r, output=False):
+    def shoot(self, Omega_at_zero, r, output=False):
         """ Solves differential equation
 
         Parameters:
@@ -117,10 +111,11 @@ class Complex_Proca_Star:
 
         """
         # Define initial data vector
-        y0 = [sigma_at_zero, 0, self._f0, 0, 0]
+        #L, dLdr, Omega, a0, da0dr, a1 = y 
+        y0 = [1, 0, Omega_at_zero, self._f0, 0, 0]
         # Solve differential equaion
         sol = spi.odeint(self.eqns, y0, r, atol = self._atol, rtol = self._rtol)
-        f_end = sol[-1, 2]
+        f_end = sol[-1, 3]
 
         if not output:
             return f_end
@@ -181,12 +176,12 @@ class Complex_Proca_Star:
         if self._omega is None:
             if self.verbose >= 2:
                 print("Normalise sigma ")
-            omega = 1.0 / self.__solution_array[-1, 0]
+            omega = 1.0 / self.__solution_array[-1, 2]
             self._omega = omega
             # Renormalising the sigma
-            self.__solution_array[:, 0] *= omega
             self.__solution_array[:, 2] *= omega
             self.__solution_array[:, 3] *= omega
+            self.__solution_array[:, 4] *= omega
         else:
             print(" sigma has been already normalised ")
 
@@ -272,11 +267,12 @@ class Complex_Proca_Star:
             if self._omega is None:
                 self.normalise_sigma()
 
-            a1 = self.__solution_array[:, 4]
-            da0dr = self.__solution_array[:, 3]
-            a0 = self.__solution_array[:, 2]
-            m = self.__solution_array[:, 1]
-            sigma = self.__solution_array[:, 0]
+            a1 = self.__solution_array[:, 5]
+            da0dr = self.__solution_array[:, 4]
+            a0 = self.__solution_array[:, 3]
+            OOmega = self.__solution_array[:, 2]
+            dLdr = self.__solution_array[:, 1]
+            L = self.__solution_array[:, 0]
             r = self.__solution_r_pos
             omega = self._omega
 
@@ -284,13 +280,11 @@ class Complex_Proca_Star:
             Lambda = self._Lambda
             mu = self._mu
 
-            F = (1 - 2 * m / r**(D - 3) - 2 *
-                 Lambda * r**2 / ((D - 2) * (D - 1)))
-
             np.savetxt(self.path + "/omega.dat", [omega])
             np.savetxt(self.path + "/rvals.dat", r)
-            np.savetxt(self.path + "/sigma.dat", sigma)
-            np.savetxt(self.path + "/m.dat", m)
+            np.savetxt(self.path + "/L.dat", L)
+            np.savetxt(self.path + "/OOmega.dat", OOmega)
+            np.savetxt(self.path + "/dLdr.dat", dLdr)
             np.savetxt(self.path + "/a0.dat", a0)
             np.savetxt(self.path + "/da0dr.dat", da0dr)
             np.savetxt(self.path + "/a1.dat", a1)
@@ -312,12 +306,14 @@ class Complex_Proca_Star:
             if self.verbose >= 1:
                 start = time.time()
 
-            a1 = self.__solution_array[:, 4]
-            da0dr = self.__solution_array[:, 3]
-            a0 = self.__solution_array[:, 2]
-            m = self.__solution_array[:, 1]
-            sigma = self.__solution_array[:, 0]
+            a1 = self.__solution_array[:, 5]
+            da0dr = self.__solution_array[:, 4]
+            a0 = self.__solution_array[:, 3]
+            OOmega = self.__solution_array[:, 2]
+            dLdr = self.__solution_array[:, 1]
+            L = self.__solution_array[:, 0]
             r = self.__solution_r_pos
+            omega = self._omega
 
             # find 90 % radius of R
             Rguess = 0.01
@@ -327,14 +323,14 @@ class Complex_Proca_Star:
             R90 = root.x[0]
 
             fig, (ax1, ax2, ax3) = plt.subplots(3, figsize=(10, 10))
-            ax1.plot(r, sigma, 'b', )
-            ax2.plot(r, m, 'g')
+            ax1.plot(r, L, 'b', )
+            ax2.plot(r, OOmega, 'g')
             ax3.plot(r, a0, 'r')
 
             ax3.set_xlabel('t')
 
-            ax1.set_ylabel(r'$\sigma $')
-            ax2.set_ylabel('$ m (t)$')
+            ax1.set_ylabel(r'$\Lambda $')
+            ax2.set_ylabel(r'$\Omega $')
             ax3.set_ylabel(r'$a0 (t)$')
 
             ax1.grid()
