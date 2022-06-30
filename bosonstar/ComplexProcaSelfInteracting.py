@@ -30,6 +30,7 @@ class Complex_Proca_Star:
     path = None
 
     _omega = None
+    _isrescaled = None
     _sigma_final = None
     __solution_array = None
     __solution_r_pos = None
@@ -170,18 +171,37 @@ class Complex_Proca_Star:
 
         return sigma_guess_tmp[0]
 
-    def normalise_sigma(self):
-        """ Extracts omega from sigma. Then we perform the coordinate transformation t -> omega t
+    def normalise_OOmega(self):
+        """ Extracts omega from OOmega. Then we perform the coordinate transformation t -> omega t
         """
         if self._omega is None:
             if self.verbose >= 2:
-                print("Normalise sigma ")
+                print("rescale r")
             omega = 1.0 / self.__solution_array[-1, 2]
             self._omega = omega
             # Renormalising the sigma
             self.__solution_array[:, 2] *= omega
             self.__solution_array[:, 3] *= omega
             self.__solution_array[:, 4] *= omega
+        else:
+            print(" sigma has been already normalised ")
+
+    def normalise_Lambda(self):
+        """ Rescale r so that Lambda->1 at infinity
+        """
+        if self._isrescaled is None:
+            if self.verbose >= 2:
+                print("Normalise sigma ")
+            Lambda_infty = self.__solution_array[-1,0]
+            print(Lambda_infty)
+            self._isrescaled = True
+            # Renormalising Lambda
+            self.__solution_array[:, 0] *= 1/Lambda_infty
+            self.__solution_array[:, 1] *= 1/Lambda_infty
+            self.__solution_array[:, 5] *= 1/Lambda_infty
+            # redefining r
+            self.__solution_r_pos *= Lambda_infty 
+
         else:
             print(" sigma has been already normalised ")
 
@@ -237,7 +257,9 @@ class Complex_Proca_Star:
             return None
         else:
             if self._omega is None:
-                self.normalise_sigma()
+                self.normalise_OOmega()
+            if self._isrescaled is None:
+                self.normalise_Lambda()
             soldict = {
                 "rpos": self.__solution_r_pos,
                 "a1": self.__solution_array[:, 4],
@@ -265,7 +287,9 @@ class Complex_Proca_Star:
             if self.verbose >= 2:
                 print("Write out data")
             if self._omega is None:
-                self.normalise_sigma()
+                self.normalise_OOmega()
+            if self._isrescaled is None:
+                self.normalise_Lambda()
 
             a1 = self.__solution_array[:, 5]
             da0dr = self.__solution_array[:, 4]
@@ -300,7 +324,10 @@ class Complex_Proca_Star:
             print("WARNING: SHOOTING HAS NOT BEEN PERFORMED")
             print("----------------------------------------")
         else:
-
+            if self._omega is None:
+                self.normalise_OOmega()
+            if self._isrescaled is None:
+                self.normalise_Lambda()
             if self.verbose >= 1:
                 print("Plotting started")
             if self.verbose >= 1:
@@ -322,16 +349,18 @@ class Complex_Proca_Star:
             root = opi.root(a0_tmp_fun, Rguess)
             R90 = root.x[0]
 
-            fig, (ax1, ax2, ax3) = plt.subplots(3, figsize=(10, 10))
+            fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, figsize=(10, 10))
             ax1.plot(r, L, 'b', )
             ax2.plot(r, OOmega, 'g')
             ax3.plot(r, a0, 'r')
+            ax4.plot(r, a1, 'black')
 
             ax3.set_xlabel('t')
 
             ax1.set_ylabel(r'$\Lambda $')
             ax2.set_ylabel(r'$\Omega $')
             ax3.set_ylabel(r'$a0 (t)$')
+            ax4.set_ylabel(r'$a1 (t)$')
 
             ax1.grid()
             ax2.grid()
