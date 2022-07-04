@@ -1,3 +1,4 @@
+from cmath import e
 from scipy.interpolate import interp1d
 import os
 import time
@@ -30,6 +31,7 @@ class Complex_Proca_Star:
     path = None
 
     _omega = None
+    _M = None
     _isrescaled = None
     _sigma_final = None
     __solution_array = None
@@ -171,13 +173,20 @@ class Complex_Proca_Star:
 
         return sigma_guess_tmp[0]
 
-    def normalise_OOmega(self):
+    def normalise_OOmega(self, M):
         """ Extracts omega from OOmega. Then we perform the coordinate transformation t -> omega t
         """
+        if self._M is None:
+            print("----------------------------------------")
+            print("WARNING: MASS EXTRACTION SHOULD HAPPEN BEFORE NORMALIZATION")
+            print("----------------------------------------")
         if self._omega is None:
             if self.verbose >= 2:
                 print("rescale r")
-            omega = 1.0 / self.__solution_array[-1, 2]
+            r_end = self.__solution_r_pos[-1]
+            end_value = (1-M/(2*r_end))/(1+M/(2*r_end))
+            print("OOmega end value:", end_value)
+            omega = end_value / self.__solution_array[-1, 2]
             self._omega = omega
             # Renormalising the sigma
             self.__solution_array[:, 2] *= omega
@@ -186,24 +195,72 @@ class Complex_Proca_Star:
         else:
             print(" sigma has been already normalised ")
 
-    def normalise_Lambda(self):
+    def normalise_Lambda(self, factor):
         """ Rescale r so that Lambda->1 at infinity
         """
         if self._isrescaled is None:
             if self.verbose >= 2:
                 print("Normalise sigma ")
-            Lambda_infty = self.__solution_array[-1,0]
-            print(Lambda_infty)
+            #Lambda_infty = self.__solution_array[-1,0]
+            #print(Lambda_infty)
             self._isrescaled = True
             # Renormalising Lambda
-            self.__solution_array[:, 0] *= 1/Lambda_infty
-            self.__solution_array[:, 1] *= 1/Lambda_infty
-            self.__solution_array[:, 5] *= 1/Lambda_infty
+            self.__solution_array[:, 0] *= 1/factor
+            self.__solution_array[:, 1] *= 1/factor
+            self.__solution_array[:, 5] *= 1/factor
             # redefining r
-            self.__solution_r_pos *= Lambda_infty 
+            self.__solution_r_pos *= factor
 
         else:
             print(" sigma has been already normalised ")
+
+    def mass_extraction(self):
+        """  
+        Get the mass of the star from the fit of the metric; returns the mass 
+        """
+        if self._omega is not None or self._isrescaled is not None:
+            print("----------------------------------------")
+            print("WARNING: MASS EXTRACTION SHOULD HAPPEN BEFORE NORMALIZATION")
+            print("----------------------------------------")
+
+        edge_index = np.searchsorted(self.__solution_r_pos, 40)
+        Lambda_schwarz = self.__solution_array[:, 0][edge_index:]
+
+        def fit_func(x,M,K):
+            return K * (M/(2*x) + 1)**2
+        def schw_OOmega(x,M):
+            return (1-M/(2*x))/(1+M/(2*x))
+
+        fit_params =opi.curve_fit(fit_func, self.__solution_r_pos[edge_index:], Lambda_schwarz)
+        self._M = fit_params[0][0]*fit_params[0][1]
+
+
+        self.normalise_OOmega(fit_params[0][0])
+        self.normalise_Lambda(fit_params[0][1])
+        OOmega_schwarz = self.__solution_array[:, 2][edge_index:]
+
+        fit_Lambda = np.array([fit_func(x, fit_params[0][0]*fit_params[0][1], 1) for x in 
+                        self.__solution_r_pos[edge_index:]])
+        fit_OOmega = np.array([schw_OOmega(x, fit_params[0][0]*fit_params[0][1]) for x in 
+                        self.__solution_r_pos[edge_index:]])
+
+        _, (ax1, ax2) = plt.subplots(2, figsize = (10,10))
+        ax1.plot(self.__solution_r_pos[edge_index:], OOmega_schwarz, "--", 
+                    alpha=0.5, label = "cut solution")
+        ax1.plot(self.__solution_r_pos, self.__solution_array[:, 2], "g",
+                    alpha = 0.7, label = "full solution")
+        ax1.plot(self.__solution_r_pos[edge_index:], fit_OOmega, label = "fit solution")
+        ax1.legend()
+        ax2.plot(self.__solution_r_pos[edge_index:], Lambda_schwarz, "--", 
+                    alpha=0.5, label = "cut solution")
+        ax2.plot(self.__solution_r_pos, self.__solution_array[:, 0], "g",
+                    alpha = 0.7, label = "full solution")
+        ax2.plot(self.__solution_r_pos[edge_index:], fit_Lambda, label = "fit solution")
+        ax2.legend()
+        plt.savefig("./fit_test.png")
+
+        return fit_params
+
 
     def make_file(self):
         """ Creates Folder for current physics problem if they do not yet exist
@@ -213,6 +270,7 @@ class Complex_Proca_Star:
         name_Dim = "/Dim_" + str(self._Dim)
         name_cA4 = "/cA4_" + str(self._cA4)
         name_Param = "/f0_" + str(self._f0)
+        
 
         path = name_Field
         if not os.path.exists(path):
@@ -267,7 +325,8 @@ class Complex_Proca_Star:
                 "a0": self.__solution_array[:, 2],
                 "m": self.__solution_array[:, 1],
                 "sigma": self.__solution_array[:, 0],
-                "omega": self._omega
+                "omega": self._omega,
+                "mass": self._M
             }
             return soldict
 
@@ -299,12 +358,14 @@ class Complex_Proca_Star:
             L = self.__solution_array[:, 0]
             r = self.__solution_r_pos
             omega = self._omega
+            M = self._M
 
             D = self._Dim
             Lambda = self._Lambda
             mu = self._mu
 
             np.savetxt(self.path + "/omega.dat", [omega])
+            np.savetxt(self.path + "/mass.dat", [M])
             np.savetxt(self.path + "/rvals.dat", r)
             np.savetxt(self.path + "/L.dat", L)
             np.savetxt(self.path + "/OOmega.dat", OOmega)

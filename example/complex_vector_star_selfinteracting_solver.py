@@ -12,7 +12,7 @@ mu = 1              # mass of the field
 cA4 = 0.0           # selfinteraction of field
 # Solver definitions
 Rstart = 10.4
-Rend = 50.00
+Rend = 60.00
 deltaR = 2
 N = 100000
 # for G = 4 use sigma_guess = 0.779
@@ -35,7 +35,9 @@ pewpew.print_parameters()
 
 pewpew.radial_walker(Rstart, Rend, deltaR, N, eps)
 
-sol = pewpew.get_solution()
+# sol = pewpew.get_solution()
+
+pewpew.mass_extraction()
 
 # =====================================
 #   Output and plotting
