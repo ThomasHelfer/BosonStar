@@ -207,6 +207,7 @@ class Complex_Proca_Star:
             # Renormalising Lambda
             self.__solution_array[:, 0] *= 1/factor
             self.__solution_array[:, 1] *= 1/factor
+            self.__solution_array[:, 4] *= 1/factor
             self.__solution_array[:, 5] *= 1/factor
             # redefining r
             self.__solution_r_pos *= factor
@@ -402,6 +403,17 @@ class Complex_Proca_Star:
             L = self.__solution_array[:, 0]
             r = self.__solution_r_pos
             omega = self._omega
+            real_da0dr = np.array([ (a0[i+1]-a0[i])/(r[i+1]-r[i]) for i in range(len(a0)-1)])
+            real_da0dr = np.append(real_da0dr,[0])
+
+            def second_deriv(x,h):
+                out = np.zeros(len(x))
+                for i in range(len(x)-2):
+                    out[i] = (x[i+2] -2*x[i+1] + x[i])/(h**2)
+                return out
+            psi = np.sqrt(np.abs(L))
+            lap_tmp = second_deriv(r * psi, r[1]-r[0])
+            lap_psi = lap_tmp / (r * r)
 
             # find 90 % radius of R
             Rguess = 0.01
@@ -428,6 +440,11 @@ class Complex_Proca_Star:
             ax3.grid()
 
             plt.savefig(self.path + "/overview.png")
+
+            plt.figure()
+            plt.plot(real_da0dr, "--")
+            plt.plot(da0dr, "r",alpha=0.5)
+            plt.savefig(self.path + "/da0dr_consistency.png", dpi=600)
 
             if self.verbose >= 1:
                 print("Plotting finished in ", time.time() - start, " sec")
