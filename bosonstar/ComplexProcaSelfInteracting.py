@@ -215,7 +215,7 @@ class Complex_Proca_Star:
         else:
             print(" sigma has been already normalised ")
 
-    def mass_extraction(self):
+    def mass_extraction(self, fit_radius):
         """  
         Get the mass of the star from the fit of the metric; returns the mass 
         """
@@ -224,7 +224,7 @@ class Complex_Proca_Star:
             print("WARNING: MASS EXTRACTION SHOULD HAPPEN BEFORE NORMALIZATION")
             print("----------------------------------------")
 
-        edge_index = np.searchsorted(self.__solution_r_pos, 40)
+        edge_index = np.searchsorted(self.__solution_r_pos, fit_radius)
         Lambda_schwarz = self.__solution_array[:, 0][edge_index:]
 
         def fit_func(x,M,K):
@@ -258,7 +258,8 @@ class Complex_Proca_Star:
                     alpha = 0.7, label = "full solution")
         ax2.plot(self.__solution_r_pos[edge_index:], fit_Lambda, label = "fit solution")
         ax2.legend()
-        plt.savefig("./fit_test.png")
+        path = self.get_path
+        plt.savefig(self.path + "/fit_test.png")
 
         return fit_params
 
