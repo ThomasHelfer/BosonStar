@@ -5,19 +5,22 @@ import numpy as np
 # =====================
 
 # Physics definitions
-f0 = 0.165          # central phi
+f0 = 0.05          # central phi
 D = 4.0             # Dimension (total not only spacial)
 Lambda = 0.0        # Cosmological constant
 mu = 1              # mass of the field
 cA4 = 0.0           # selfinteraction of field
 # Solver definitions
 Rstart = 10.4
-Rend = 50.00
+Rend = 80.00
 deltaR = 2
+fit_R = 50
 N = 100000
 # for G = 4 use sigma_guess = 0.779
 GNewton = 1.0
-sigma_guess = 0.8734
+#sigma_guess = 0.8734
+sigma_guess = 0.9572950445650351 #for f0.04
+#sigma_guess = 0.9841915506119396  # for f0.01
 
 rtol = 1e-12
 atol = 1e-14
@@ -35,7 +38,10 @@ pewpew.print_parameters()
 
 pewpew.radial_walker(Rstart, Rend, deltaR, N, eps)
 
-sol = pewpew.get_solution()
+# sol = pewpew.get_solution()
+
+
+pewpew.mass_extraction(fit_R)
 
 # =====================================
 #   Output and plotting
